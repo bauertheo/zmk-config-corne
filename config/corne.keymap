@@ -25,21 +25,21 @@
 
         /* Layer 0: Colemak-DH
          * ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
-         * │     │  Q  │  W  │  F  │  P  │  B  │   │  J  │  L  │  U  │  Y  │  '  │RA(S)│
+         * │ ESC │  Q  │  W  │  F  │  P  │  B  │   │  J  │  L  │  U  │  Y  │  '  │RA(S)│
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
          * │ TAB │  A  │  R  │  S  │  T  │  G  │   │  M  │  N  │  E  │  I  │  O  │ RET │
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
          * │LSHFT│  Z  │  X  │  C  │  D  │  V  │   │  K  │  H  │  ,  │  .  │  /  │     │
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
-         *                   │BSPC │ SPC │L2/← │   │L1/→ │LSHFT│RALT │
+         *                   │BSPC │ SPC │L2   │   │L1   │LSHFT│RALT │
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
          */
         colemak_layer {
             bindings = <
-                &none     &kp Q  &kp W  &kp F  &kp P  &kp B        &kp J      &kp L      &kp U      &kp Y    &kp SQT   &kp RA(S)
+                &kp ESC   &kp Q  &kp W  &kp F  &kp P  &kp B        &kp J      &kp L      &kp U      &kp Y    &kp SQT   &kp RA(S)
                 &kp TAB   &kp A  &kp R  &kp S  &kp T  &kp G        &kp M      &kp N      &kp E      &kp I    &kp O     &kp RET
                 &kp LSHFT &kp Z  &kp X  &kp C  &kp D  &kp V        &kp K      &kp H      &kp COMMA  &kp DOT  &kp FSLH  &none
-                                  &kp BSPC  &kp SPACE  &lt 2 LEFT   &lt 1 RIGHT  &kp LSHFT  &kp RALT
+                                  &kp BSPC  &kp SPACE  &mo 2      &mo 1  &kp LSHFT  &kp RALT
             >;
         };
 
