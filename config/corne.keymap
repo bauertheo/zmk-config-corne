@@ -1,0 +1,106 @@
+/*
+ * Colemak-DH layout for Corne (42 keys)
+ * Converted from idobao/id75 QMK keymap "standardish_colmak9"
+ *
+ * Layer mapping (QMK -> ZMK):
+ *   QMK 0 -> ZMK 0  Colemak-DH (base)
+ *   QMK 2 -> ZMK 1  Symbols + Numpad
+ *   QMK 4 -> ZMK 2  Extend (navigation)
+ *   QMK 3 -> ZMK 3  Function + Media
+ *
+ * Key positions extracted from ID75 grid:
+ *   Left  3x6 block: cols 0-5,  rows 1-3
+ *   Right 3x6 block: cols 9-14, rows 1-3
+ *   Left  thumb:     cols 4-6,  row 4
+ *   Right thumb:     cols 8-10, row 4
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+
+        /* Layer 0: Colemak-DH
+         * ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
+         * │     │  Q  │  W  │  F  │  P  │  B  │   │  J  │  L  │  U  │  Y  │  '  │RA(S)│
+         * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+         * │ TAB │  A  │  R  │  S  │  T  │  G  │   │  M  │  N  │  E  │  I  │  O  │ RET │
+         * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+         * │LSHFT│  Z  │  X  │  C  │  D  │  V  │   │  K  │  H  │  ,  │  .  │  /  │     │
+         * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
+         *                   │BSPC │ SPC │L2/← │   │L1/→ │LSHFT│RALT │
+         *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
+         */
+        colemak_layer {
+            bindings = <
+                &none     &kp Q  &kp W  &kp F  &kp P  &kp B        &kp J      &kp L      &kp U      &kp Y    &kp SQT   &kp RA(S)
+                &kp TAB   &kp A  &kp R  &kp S  &kp T  &kp G        &kp M      &kp N      &kp E      &kp I    &kp O     &kp RET
+                &kp LSHFT &kp Z  &kp X  &kp C  &kp D  &kp V        &kp K      &kp H      &kp COMMA  &kp DOT  &kp FSLH  &none
+                                  &kp BSPC  &kp SPACE  &lt 2 LEFT   &lt 1 RIGHT  &kp LSHFT  &kp RALT
+            >;
+        };
+
+        /* Layer 1: Symbols + Numpad (QMK Layer 2)
+         * ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
+         * │  ^  │  !  │  @  │  #  │  :  │  ;  │   │  =  │KP 7 │KP 8 │KP 9 │ KP+ │  ~  │
+         * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+         * │  &  │NUBS │  |  │  {  │  (  │  [  │   │ KP* │KP 4 │KP 5 │KP 6 │ KP- │  %  │
+         * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+         * │  $  │  -  │  _  │  }  │  )  │  ]  │   │KP 0 │KP 1 │KP 2 │KP 3 │ KP/ │RA(5)│
+         * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
+         *                   │BSPC │ SPC │ MO3 │   │     │     │     │
+         *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
+         */
+        symbols_layer {
+            bindings = <
+                &kp CARET       &kp EXCL         &kp AT    &kp HASH  &kp COLON  &kp SEMI       &kp EQUAL       &kp KP_N7  &kp KP_N8  &kp KP_N9  &kp KP_PLUS     &kp TILDE
+                &kp AMPS        &kp NON_US_BSLH  &kp PIPE  &kp LBRC  &kp LPAR   &kp LBKT       &kp KP_MULTIPLY &kp KP_N4  &kp KP_N5  &kp KP_N6  &kp KP_MINUS    &kp PRCNT
+                &kp DLLR        &kp MINUS         &kp UNDER &kp RBRC  &kp RPAR   &kp RBKT       &kp KP_N0       &kp KP_N1  &kp KP_N2  &kp KP_N3  &kp KP_DIVIDE   &kp RA(N5)
+                                                   &kp BSPC  &kp SPACE  &mo 3     &none          &none           &none
+            >;
+        };
+
+        /* Layer 2: Extend / Navigation (QMK Layer 4)
+         * ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
+         * │     │ ESC │A(←) │ C-F │A(→) │ INS │   │PG_UP│HOME │  UP │ END │CAPS │     │
+         * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+         * │A-TAB│ ALT │ GUI │SHIFT│CTRL │ALTGR│   │PG_DN│LEFT │DOWN │RIGHT│ DEL │     │
+         * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+         * │     │UNDO │ CUT │COPY │ GUI │PASTE│   │PSCRN│BSPC │ TAB │ APP │ RET │     │
+         * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
+         *                   │BSPC │ SPC │     │   │ MO3 │     │     │
+         *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
+         */
+        extend_layer {
+            bindings = <
+                &none         &kp ESC    &kp LA(LEFT)  &kp LC(F)  &kp LA(RIGHT) &kp INS      &kp PG_UP  &kp HOME  &kp UP    &kp END    &kp CAPS   &none
+                &kp LA(TAB)   &sk LALT   &sk LGUI      &sk LSHFT  &sk LCTRL     &sk RALT     &kp PG_DN  &kp LEFT  &kp DOWN  &kp RIGHT  &kp DEL    &none
+                &none         &kp LC(Z)  &kp LC(X)     &kp LC(C)  &kp LGUI      &kp LC(V)    &kp PSCRN  &kp BSPC  &kp TAB   &kp K_APP  &kp RET    &none
+                                                  &kp BSPC  &kp SPACE  &none     &mo 3        &none      &none
+            >;
+        };
+
+        /* Layer 3: Function + Media (QMK Layer 3)
+         * ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
+         * │BTCLR│     │     │     │     │CALC │   │ F12 │ F7  │ F8  │ F9  │C-KP+│ BT0 │
+         * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+         * │     │ ALT │ GUI │SHIFT│CTRL │ALTGR│   │ F11 │ F4  │ F5  │ F6  │C-KP-│ BT1 │
+         * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+         * │     │MUTE │VOL_D│CS-C │VOL_U│CS-V │   │ F10 │ F1  │ F2  │ F3  │C-KP0│ BT2 │
+         * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
+         *                   │     │     │     │   │     │     │     │
+         *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
+         */
+        function_layer {
+            bindings = <
+                &bt BT_CLR  &none       &none         &none          &none         &kp C_AL_CALC    &kp F12  &kp F7  &kp F8  &kp F9  &kp LC(KP_PLUS)   &bt BT_SEL 0
+                &none       &sk LALT    &sk LGUI      &sk LSHFT      &sk LCTRL     &sk RALT         &kp F11  &kp F4  &kp F5  &kp F6  &kp LC(KP_MINUS)  &bt BT_SEL 1
+                &none       &kp C_MUTE  &kp C_VOL_DN  &kp LC(LS(C))  &kp C_VOL_UP  &kp LC(LS(V))    &kp F10  &kp F1  &kp F2  &kp F3  &kp LC(KP_N0)     &bt BT_SEL 2
+                                                       &none          &none         &none            &none    &none   &none
+            >;
+        };
+    };
+};

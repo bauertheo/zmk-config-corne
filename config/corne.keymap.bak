@@ -1,0 +1,82 @@
+/*
+ * Seniply Layout for Corne (42 keys)
+ * Converted from stevep99/seniply QMK Redox keymap
+ * https://github.com/stevep99/seniply
+ *
+ * Layer 0: Base (Colemak-DH)
+ * Layer 1: Base (QWERTY alternative)
+ * Layer 2: Symbols
+ * Layer 3: Numbers
+ * Layer 4: Extend (Navigation)
+ * Layer 5: Function
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+
+        /* Layer 0: Colemak-DH */
+        base_layer {
+            bindings = <
+                &kp ESC   &kp Q  &kp W  &kp F     &kp P  &kp B        &kp J  &kp L  &kp U      &kp Y    &kp SQT   &kp RA(S) 
+                &kp TAB   &kp A  &kp R  &kp S     &kp T  &kp G        &kp M  &kp N  &kp E      &kp I    &kp O     &kp RET
+                &kp LSHFT &kp Z  &kp X  &kp C     &kp D  &kp V        &kp K  &kp H  &kp COMMA  &kp DOT  &kp FSLH  &kp RSHFT
+                                        &kp LGUI  &mo 4  &kp LSHFT    &kp SPACE  &sl 2  &mo 5
+            >;
+        };
+
+        /* Layer 1: QWERTY (alternative base, activate with &to 1) */
+        qwerty_layer {
+            bindings = <
+                &kp TAB   &kp Q  &kp W  &kp E     &kp R  &kp T        &kp Y  &kp U  &kp I      &kp O    &kp P     &kp BSPC
+                &kp ESC   &kp A  &kp S  &kp D     &kp F  &kp G        &kp H  &kp J  &kp K      &kp L    &kp SQT   &kp RET
+                &kp LSHFT &kp Z  &kp X  &kp C     &kp V  &kp B        &kp N  &kp M  &kp COMMA  &kp DOT  &kp FSLH  &kp RSHFT
+                                        &kp LGUI  &mo 4  &kp LSHFT    &kp SPACE  &mo 2  &mo 5
+            >;
+        };
+
+        /* Layer 2: Symbols */
+        symbols_layer {
+            bindings = <
+                &trans  &kp EXCL         &kp AT               &kp HASH         &kp DLLR             &kp PRCNT       &kp EQUAL  &kp GRAVE  &kp COLON  &kp SEMI  &kp PLUS   &kp DEL
+                &trans  &sk LALT         &sk LGUI             &sk LSHFT        &sk LCTRL            &kp CARET       &kp ASTR   &kp LPAR   &kp LBRC   &kp LBKT  &kp MINUS  &kp KP_ENTER
+                &trans  &kp NON_US_BSLH  &kp LS(NON_US_BSLH)  &kp NON_US_HASH  &kp LS(NON_US_HASH)  &kp AMPS       &kp TILDE  &kp RPAR   &kp RBRC   &kp RBKT  &kp UNDER  &trans
+                                                              &trans           &mo 5                &mo 3           &kp SPACE  &trans     &kp KP_ENTER
+            >;
+        };
+
+        /* Layer 3: Numbers */
+        numbers_layer {
+            bindings = <
+                &trans  &none     &none      &none     &none      &kp KP_NUM       &kp EQUAL  &kp N7  &kp N8  &kp N9  &kp PLUS   &kp DEL
+                &trans  &sk LALT  &sk LGUI   &sk LSHFT &sk LCTRL  &sk RALT         &kp ASTR   &kp N4  &kp N5  &kp N6  &kp MINUS  &kp RET
+                &trans  &none     &kp K_APP  &kp TAB   &kp BSPC   &kp RET          &kp N0     &kp N1  &kp N2  &kp N3  &kp FSLH   &trans
+                                             &trans    &tog 3     &trans            &kp SPACE  &none   &kp RET
+            >;
+        };
+
+        /* Layer 4: Extend (Navigation) */
+        extend_layer {
+            bindings = <
+                &trans  &kp ESC   &kp LA(LEFT)  &kp LC(F)  &kp LA(RIGHT)  &kp INS          &kp PG_UP  &kp HOME  &kp UP    &kp END    &kp CAPS   &trans
+                &trans  &sk LALT  &sk LGUI      &sk LSHFT  &sk LCTRL      &sk RALT         &kp PG_DN  &kp LEFT  &kp DOWN  &kp RIGHT  &kp DEL    &trans
+                &trans  &kp LC(Z) &kp LC(X)     &kp LC(C)  &kp LGUI       &kp LC(V)        &kp RET    &kp BSPC  &kp TAB   &kp K_APP  &kp PSCRN  &trans
+                                                &trans     &trans         &trans            &kp RET    &mo 5     &trans
+            >;
+        };
+
+        /* Layer 5: Function */
+        function_layer {
+            bindings = <
+                &trans  &kp C_STOP  &kp C_PREV    &kp C_PP       &kp C_NEXT   &kp C_BRI_UP     &kp F12  &kp F7  &kp F8  &kp F9  &kp SLCK  &trans
+                &trans  &sk LALT    &sk LGUI      &sk LSHFT      &sk LCTRL    &kp C_BRI_DN     &kp F11  &kp F4  &kp F5  &kp F6  &to 0     &trans
+                &trans  &kp C_MUTE  &kp C_VOL_DN  &kp LC(LS(C))  &kp C_VOL_UP &kp LC(LS(V))   &kp F10  &kp F1  &kp F2  &kp F3  &to 1     &trans
+                                                  &trans         &none        &trans            &trans   &none   &trans
+            >;
+        };
+    };
+};
