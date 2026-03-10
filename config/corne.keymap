@@ -79,7 +79,7 @@
                 &none         &kp ESC    &kp LA(LEFT)  &kp LC(F)  &kp LA(RIGHT) &kp INS      &kp PG_UP  &kp HOME  &kp UP    &kp END    &kp CAPS   &none
                 &kp LA(TAB)   &sk LALT   &sk LGUI      &sk LSHFT  &sk LCTRL     &sk RALT     &kp PG_DN  &kp LEFT  &kp DOWN  &kp RIGHT  &kp DEL    &none
                 &none         &kp LC(Z)  &kp LC(X)     &kp LC(C)  &kp LGUI      &kp LC(V)    &kp PSCRN  &kp BSPC  &kp TAB   &kp K_APP  &kp RET    &none
-                                                  &kp BSPC  &kp SPACE  &none     &mo 3        &none      &none
+                                                  &kp BSPC  &kp SPACE  &none     &mo 3        &mo 4  &none
             >;
         };
 
@@ -101,6 +101,16 @@
                 &none       &kp C_MUTE  &kp C_VOL_DN  &kp LC(LS(C))  &kp C_VOL_UP  &kp LC(LS(V))    &kp F10  &kp F1  &kp F2  &kp F3  &kp LC(KP_N0)     &bt BT_SEL 2
                                                        &none          &none         &none            &none    &none   &none
             >;
+        };
+        rgb_layer {
+            bindings = <
+                &none       &none       &none         &none          &none         &none            &rgb_ug RGB_TOG &rgb_ug RGB_EFR &rgb_ug RGB_BRI &rgb_ug RGB_EFF &none   &none
+                &none       &none       &none         &none          &none         &none            &rgb_ug RGB_SAI   &rgb_ug RGB_HUD &rgb_ug RGB_BRD &rgb_ug RGB_HUI &none   &none
+                &none       &none       &none         &none          &none         &none            &rgb_ug RGB_SAD   &none   &none   &none   &none   &none
+                                                       &none          &none         &none            &none    &none   &none
+            >;
+
+                
         };
     };
 };
