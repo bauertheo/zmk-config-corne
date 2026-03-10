@@ -32,35 +32,35 @@
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
          * │LSHFT│  Z  │  X  │  C  │  D  │  V  │   │  K  │  H  │  ,  │  .  │  /  │     │
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
-         *                   │BSPC │ SPC │L2   │   │L1   │LSHFT│RALT │
+         *                   │BSPC │ SPC │ L2  │   │ L1  │LSHFT│RALT │
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
          */
         colemak_layer {
             bindings = <
-                &kp ESC   &kp Q  &kp W  &kp F  &kp P  &kp B        &kp J      &kp L      &kp U      &kp Y    &kp SQT   &kp RA(S)
-                &kp TAB   &kp A  &kp R  &kp S  &kp T  &kp G        &kp M      &kp N      &kp E      &kp I    &kp O     &kp RET
-                &kp LSHFT &kp Z  &kp X  &kp C  &kp D  &kp V        &kp K      &kp H      &kp COMMA  &kp DOT  &kp FSLH  &none
-                                  &kp BSPC  &kp SPACE  &mo 2      &mo 1  &kp LSHFT  &kp RALT
+                &kp ESC    &kp Q  &kp W  &kp F      &kp P      &kp B      &kp J  &kp L      &kp U      &kp Y    &kp SQT   &kp RA(S)
+                &kp TAB    &kp A  &kp R  &kp S      &kp T      &kp G      &kp M  &kp N      &kp E      &kp I    &kp O     &kp RET
+                &kp LSHFT  &kp Z  &kp X  &kp C      &kp D      &kp V      &kp K  &kp H      &kp COMMA  &kp DOT  &kp FSLH  &none
+                                         &kp BSPC   &kp SPACE  &mo 2      &mo 1  &kp LSHFT  &kp RALT
             >;
         };
 
         /* Layer 1: Symbols + Numpad (QMK Layer 2)
          * ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
-         * │  ^  │  !  │  @  │  #  │  :  │  ;  │   │  =  │KP 7 │KP 8 │KP 9 │ KP+ │  ~  │
+         * │  ^  │  !  │  @  │  #  │  :  │  ;  │   │  =  │  7  │  8  │  9  │ KP+ │  ~  │
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-         * │  &  │NUBS │  |  │  {  │  (  │  [  │   │ KP* │KP 4 │KP 5 │KP 6 │ KP- │  %  │
+         * │  &  │NUBS │  |  │  {  │  (  │  [  │   │ KP* │  4  │  5  │  6  │ KP- │  %  │
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-         * │  $  │  -  │  _  │  }  │  )  │  ]  │   │KP 0 │KP 1 │KP 2 │KP 3 │ KP/ │RA(5)│
+         * │  $  │  -  │  _  │  }  │  )  │  ]  │   │  0  │  1  │  2  │  3  │ KP/ │RA(5)│
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
          *                   │BSPC │ SPC │ MO3 │   │     │     │     │
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
          */
         symbols_layer {
             bindings = <
-                &kp CARET       &kp EXCL         &kp AT    &kp HASH  &kp COLON  &kp SEMI       &kp EQUAL       &kp KP_N7  &kp KP_N8  &kp KP_N9  &kp KP_PLUS     &kp TILDE
-                &kp AMPS        &kp NON_US_BSLH  &kp PIPE  &kp LBRC  &kp LPAR   &kp LBKT       &kp KP_MULTIPLY &kp KP_N4  &kp KP_N5  &kp KP_N6  &kp KP_MINUS    &kp PRCNT
-                &kp DLLR        &kp MINUS         &kp UNDER &kp RBRC  &kp RPAR   &kp RBKT       &kp KP_N0       &kp KP_N1  &kp KP_N2  &kp KP_N3  &kp KP_DIVIDE   &kp RA(N5)
-                                                   &kp BSPC  &kp SPACE  &mo 3     &none          &none           &none
+                &kp CARET  &kp EXCL          &kp AT     &kp HASH   &kp COLON  &kp SEMI    &kp EQUAL        &kp N7  &kp N8  &kp N9  &kp KP_PLUS    &kp TILDE
+                &kp AMPS   &kp NON_US_BSLH   &kp PIPE   &kp LBRC   &kp LPAR   &kp LBKT    &kp KP_MULTIPLY  &kp N4  &kp N5  &kp N6  &kp KP_MINUS   &kp PRCNT
+                &kp DLLR   &kp MINUS          &kp UNDER  &kp RBRC   &kp RPAR   &kp RBKT    &kp N0           &kp N1  &kp N2  &kp N3  &kp KP_DIVIDE  &kp RA(N5)
+                                                          &kp BSPC   &kp SPACE  &mo 3       &none            &none      &none
             >;
         };
 
@@ -72,15 +72,15 @@
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
          * │     │UNDO │ CUT │COPY │ GUI │PASTE│   │PSCRN│BSPC │ TAB │ APP │ RET │     │
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
-         *                   │BSPC │ SPC │     │   │ MO3 │     │     │
+         *                   │BSPC │ SPC │     │   │ MO3 │ MO4 │     │
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
          */
         extend_layer {
             bindings = <
-                &none         &kp ESC    &kp LA(LEFT)  &kp LC(F)  &kp LA(RIGHT) &kp INS      &kp PG_UP  &kp HOME  &kp UP    &kp END    &kp CAPS   &none
-                &kp LA(TAB)   &sk LALT   &sk LGUI      &sk LSHFT  &sk LCTRL     &sk RALT     &kp PG_DN  &kp LEFT  &kp DOWN  &kp RIGHT  &kp DEL    &none
-                &none         &kp LC(Z)  &kp LC(X)     &kp LC(C)  &kp LGUI      &kp LC(V)    &kp PSCRN  &kp BSPC  &kp TAB   &kp K_APP  &kp RET    &none
-                                                  &kp BSPC  &kp SPACE  &none     &mo 3        &mo 4  &none
+                &none        &kp ESC    &kp LA(LEFT)  &kp LC(F)   &kp LA(RIGHT)  &kp INS     &kp PG_UP  &kp HOME  &kp UP    &kp END    &kp CAPS  &none
+                &kp LA(TAB)  &sk LALT   &sk LGUI      &sk LSHFT   &sk LCTRL      &sk RALT    &kp PG_DN  &kp LEFT  &kp DOWN  &kp RIGHT  &kp DEL   &none
+                &none        &kp LC(Z)  &kp LC(X)     &kp LC(C)   &kp LGUI       &kp LC(V)   &kp PSCRN  &kp BSPC  &kp TAB   &kp K_APP  &kp RET   &none
+                                                       &kp BSPC   &kp SPACE      &none       &mo 3      &mo 4     &none
             >;
         };
 
@@ -90,28 +90,38 @@
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
          * │     │ ALT │ GUI │SHIFT│CTRL │ALTGR│   │ F11 │ F4  │ F5  │ F6  │C-KP-│ BT1 │
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-         * │     │MUTE │VOL_D│CS-C │VOL_U│CS-V │   │ F10 │ F1  │ F2  │ F3  │C-KP0│ BT2 │
+         * │     │MUTE │VOL_D│CS-C │VOL_U│CS-V │   │ F10 │ F1  │ F2  │ F3  │ C-0 │ BT2 │
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
          *                   │     │     │     │   │     │     │     │
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
          */
         function_layer {
             bindings = <
-                &bt BT_CLR  &none       &none         &none          &none         &kp C_AL_CALC    &kp F12  &kp F7  &kp F8  &kp F9  &kp LC(KP_PLUS)   &bt BT_SEL 0
-                &none       &sk LALT    &sk LGUI      &sk LSHFT      &sk LCTRL     &sk RALT         &kp F11  &kp F4  &kp F5  &kp F6  &kp LC(KP_MINUS)  &bt BT_SEL 1
-                &none       &kp C_MUTE  &kp C_VOL_DN  &kp LC(LS(C))  &kp C_VOL_UP  &kp LC(LS(V))    &kp F10  &kp F1  &kp F2  &kp F3  &kp LC(KP_N0)     &bt BT_SEL 2
-                                                       &none          &none         &none            &none    &none   &none
+                &bt BT_CLR  &none       &none          &none          &none         &kp C_AL_CALC    &kp F12  &kp F7  &kp F8  &kp F9  &kp LC(KP_PLUS)   &bt BT_SEL 0
+                &none       &sk LALT    &sk LGUI       &sk LSHFT      &sk LCTRL     &sk RALT         &kp F11  &kp F4  &kp F5  &kp F6  &kp LC(KP_MINUS)  &bt BT_SEL 1
+                &none       &kp C_MUTE  &kp C_VOL_DN   &kp LC(LS(C))  &kp C_VOL_UP  &kp LC(LS(V))    &kp F10  &kp F1  &kp F2  &kp F3  &kp LC(N0)        &bt BT_SEL 2
+                                                        &none          &none         &none            &none    &none   &none
             >;
         };
+
+        /* Layer 4: RGB Underglow
+         * ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
+         * │     │     │     │     │     │     │   │ TOG │ EF- │ BRI+│ EF+ │     │     │
+         * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+         * │     │     │     │     │     │     │   │ SAT+│ HUE-│ BRI-│ HUE+│     │     │
+         * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+         * │     │     │     │     │     │     │   │ SAT-│     │     │     │     │     │
+         * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
+         *                   │     │     │     │   │     │     │     │
+         *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
+         */
         rgb_layer {
             bindings = <
-                &none       &none       &none         &none          &none         &none            &rgb_ug RGB_TOG &rgb_ug RGB_EFR &rgb_ug RGB_BRI &rgb_ug RGB_EFF &none   &none
-                &none       &none       &none         &none          &none         &none            &rgb_ug RGB_SAI   &rgb_ug RGB_HUD &rgb_ug RGB_BRD &rgb_ug RGB_HUI &none   &none
-                &none       &none       &none         &none          &none         &none            &rgb_ug RGB_SAD   &none   &none   &none   &none   &none
-                                                       &none          &none         &none            &none    &none   &none
+                &none  &none  &none  &none  &none  &none    &rgb_ug RGB_TOG  &rgb_ug RGB_EFR  &rgb_ug RGB_BRI  &rgb_ug RGB_EFF  &none  &none
+                &none  &none  &none  &none  &none  &none    &rgb_ug RGB_SAI  &rgb_ug RGB_HUD  &rgb_ug RGB_BRD  &rgb_ug RGB_HUI  &none  &none
+                &none  &none  &none  &none  &none  &none    &rgb_ug RGB_SAD  &none            &none            &none            &none  &none
+                                     &none  &none  &none    &none            &none            &none
             >;
-
-                
         };
     };
 };
