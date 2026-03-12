@@ -86,27 +86,27 @@
 
         /* Layer 3: Function + Media (QMK Layer 3)
          * ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
-         * │BTCLR│     │     │     │     │CALC │   │ F12 │ F7  │ F8  │ F9  │C-KP+│ BT0 │
+         * │     │     │     │     │     │CALC │   │ F12 │ F7  │ F8  │ F9  │C-KP+│     │
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-         * │     │ ALT │ GUI │SHIFT│CTRL │ALTGR│   │ F11 │ F4  │ F5  │ F6  │C-KP-│ BT1 │
+         * │     │ ALT │ GUI │SHIFT│CTRL │ALTGR│   │ F11 │ F4  │ F5  │ F6  │C-KP-│     │
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-         * │     │MUTE │VOL_D│CS-C │VOL_U│CS-V │   │ F10 │ F1  │ F2  │ F3  │ C-0 │ BT2 │
+         * │     │MUTE │VOL_D│CS-C │VOL_U│CS-V │   │ F10 │ F1  │ F2  │ F3  │ C-0 │     │
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
          *                   │     │     │     │   │     │     │     │
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
          */
         function_layer {
             bindings = <
-                &bt BT_CLR  &none       &none          &none          &none         &kp C_AL_CALC    &kp F12  &kp F7  &kp F8  &kp F9  &kp LC(KP_PLUS)   &bt BT_SEL 0
-                &none       &sk LALT    &sk LGUI       &sk LSHFT      &sk LCTRL     &sk RALT         &kp F11  &kp F4  &kp F5  &kp F6  &kp LC(KP_MINUS)  &bt BT_SEL 1
-                &none       &kp C_MUTE  &kp C_VOL_DN   &kp LC(LS(C))  &kp C_VOL_UP  &kp LC(LS(V))    &kp F10  &kp F1  &kp F2  &kp F3  &kp LC(N0)        &bt BT_SEL 2
-                                                        &none          &none         &none            &none    &none   &none
+                &none  &none       &none          &none          &none         &kp C_AL_CALC    &kp F12  &kp F7  &kp F8  &kp F9  &kp LC(KP_PLUS)   &none
+                &none  &sk LALT    &sk LGUI       &sk LSHFT      &sk LCTRL     &sk RALT         &kp F11  &kp F4  &kp F5  &kp F6  &kp LC(KP_MINUS)  &none
+                &none  &kp C_MUTE  &kp C_VOL_DN   &kp LC(LS(C))  &kp C_VOL_UP  &kp LC(LS(V))    &kp F10  &kp F1  &kp F2  &kp F3  &kp LC(N0)        &none
+                                                   &none          &none         &none            &none    &none   &none
             >;
         };
 
-        /* Layer 4: RGB Underglow
+        /* Layer 4: RGB + Bluetooth
          * ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
-         * │     │     │     │     │     │     │   │ TOG │ EF- │ BRI+│ EF+ │     │     │
+         * │BTCLR│ BT0 │ BT1 │ BT2 │ BT3 │ BT4 │   │ TOG │ EF- │ BRI+│ EF+ │     │     │
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
          * │     │     │     │     │     │     │   │ SAT+│ HUE-│ BRI-│ HUE+│     │     │
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
@@ -115,12 +115,12 @@
          *                   │     │     │     │   │     │     │     │
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
          */
-        rgb_layer {
+        rgb_bt_layer {
             bindings = <
-                &none  &none  &none  &none  &none  &none    &rgb_ug RGB_TOG  &rgb_ug RGB_EFR  &rgb_ug RGB_BRI  &rgb_ug RGB_EFF  &none  &none
-                &none  &none  &none  &none  &none  &none    &rgb_ug RGB_SAI  &rgb_ug RGB_HUD  &rgb_ug RGB_BRD  &rgb_ug RGB_HUI  &none  &none
-                &none  &none  &none  &none  &none  &none    &rgb_ug RGB_SAD  &none            &none            &none            &none  &none
-                                     &none  &none  &none    &none            &none            &none
+                &bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4    &rgb_ug RGB_TOG  &rgb_ug RGB_EFR  &rgb_ug RGB_BRI  &rgb_ug RGB_EFF  &none  &none
+                &none       &none         &none         &none         &none         &none            &rgb_ug RGB_SAI  &rgb_ug RGB_HUD  &rgb_ug RGB_BRD  &rgb_ug RGB_HUI  &none  &none
+                &none       &none         &none         &none         &none         &none            &rgb_ug RGB_SAD  &none            &none            &none            &none  &none
+                                                        &none         &none         &none            &none            &none            &none
             >;
         };
     };
