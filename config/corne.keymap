@@ -50,15 +50,15 @@
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
          * │     │  Z  │  X  │  C  │  D  │  V  │   │  K  │  H  │  ,  │  .  │  /  │     │
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
-         *                   │BSPC │ SPC │ L2  │   │ L1  │LSHFT│LCTRL│
+         *                   │LCTRL│ SPC │ L2  │   │ L1  │LSHFT│BSPC │
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
          */
         colemak_layer {
             bindings = <
-                &kp ESC  &kp Q  &kp W  &kp F      &kp P      &kp B      &kp J  &kp L      &kp U      &kp Y    &kp SQT   &kp RA(S)
-                &kp TAB  &kp A  &kp R  &kp S      &kp T      &kp G      &kp M  &kp N      &kp E      &kp I    &kp O     &kp RET
-                &none    &kp Z  &kp X  &kp C      &kp D      &kp V      &kp K  &kp H      &kp COMMA  &kp DOT  &kp FSLH  &none
-                                       &kp BSPC   &kp SPACE  &mo 2      &mo 1  &kp LSHFT  &kp LCTRL 
+                &kp ESC    &kp Q  &kp W  &kp F      &kp P      &kp B      &kp J  &kp L      &kp U      &kp Y    &kp SQT   &kp RA(S)
+                &kp TAB    &kp A  &kp R  &kp S      &kp T      &kp G      &kp M  &kp N      &kp E      &kp I    &kp O     &kp RET
+                &none      &kp Z  &kp X  &kp C      &kp D      &kp V      &kp K  &kp H      &kp COMMA  &kp DOT  &kp FSLH  &none
+                                         &kp LCTRL  &kp SPACE  &mo 2      &mo 1  &kp LSHFT  &kp BSPC
             >;
         };
 
@@ -70,7 +70,7 @@
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
          * │  $  │  -  │  _  │  }  │  )  │  ]  │   │  0  │  1  │  2  │  3  │ KP/ │RA(5)│
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
-         *                   │BSPC │ SPC │[L2] │   │     │     │     │
+         *                   │LCTRL│ SPC │[L2] │   │     │     │     │
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
          */
         symbols_layer {
@@ -78,7 +78,7 @@
                 &kp CARET  &kp EXCL   &kp AT     &kp HASH   &kp COLON  &kp SEMI    &kp EQUAL        &kp N7  &kp N8  &kp N9  &kp KP_PLUS    &kp TILDE
                 &kp AMPS   &kp BSLH   &kp PIPE   &kp LBRC   &kp LPAR   &kp LBKT    &kp KP_MULTIPLY  &kp N4  &kp N5  &kp N6  &kp KP_MINUS   &kp PRCNT
                 &kp DLLR   &kp MINUS  &kp UNDER  &kp RBRC   &kp RPAR   &kp RBKT    &kp N0           &kp N1  &kp N2  &kp N3  &kp KP_DIVIDE  &kp RA(N5)
-                                                  &kp BSPC   &kp SPACE  &trans      &none            &none   &none
+                                                  &kp LCTRL  &kp SPACE  &trans      &none            &none   &none
             >;
         };
 
@@ -90,16 +90,16 @@
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
          * │     │UNDO │ CUT │COPY │ GUI │PASTE│   │PSCRN│BSPC │ TAB │ APP │ RET │     │
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
-         *                   │BSPC │ SPC │     │   │[L1] │ MO4 │     │
+         *                   │LCTRL│ SPC │     │   │[L1] │ MO4 │     │
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
-         *  SWAP = Alt-Tab swapper (tap sk CTRL first for Ctrl-Tab)
+         *  SWAP = Alt-Tab swapper
          */
         extend_layer {
             bindings = <
                 &none     &kp ESC    &kp LA(LEFT)  &kp LC(F)   &kp LA(RIGHT)  &kp INS     &kp PG_UP  &kp HOME  &kp UP    &kp END    &kp CAPS  &none
                 &swapper  &sk LALT   &sk LGUI      &sk LSHFT   &sk LCTRL      &sk RALT    &kp PG_DN  &kp LEFT  &kp DOWN  &kp RIGHT  &kp DEL   &none
                 &none     &kp LC(Z)  &kp LC(X)     &kp LC(C)   &kp LGUI       &kp LC(V)   &kp PSCRN  &kp BSPC  &kp TAB   &kp K_APP  &kp RET   &none
-                                                    &kp BSPC   &kp SPACE      &none       &trans     &mo 4     &none
+                                                    &kp LCTRL  &kp SPACE      &none       &trans     &mo 4     &none
             >;
         };
 
