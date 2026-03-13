@@ -23,23 +23,11 @@
 
 / {
     behaviors {
-        alt_swapper: alt_swapper {
+        swapper: swapper {
             compatible = "zmk,behavior-tri-state";
             #binding-cells = <0>;
             bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
-            ignored-key-positions = <15 16>;
-        };
-        ctrl_swapper: ctrl_swapper {
-            compatible = "zmk,behavior-tri-state";
-            #binding-cells = <0>;
-            bindings = <&kt LCTRL>, <&kp TAB>, <&kt LCTRL>;
             ignored-key-positions = <15>;
-        };
-        swapper: swapper {
-            compatible = "zmk,behavior-mod-morph";
-            #binding-cells = <0>;
-            bindings = <&alt_swapper>, <&ctrl_swapper>;
-            mods = <(MOD_LCTL)>;
         };
     };
 
