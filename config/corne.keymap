@@ -50,7 +50,7 @@
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
          * │     │  Z  │  X  │  C  │  D  │  V  │   │  K  │  H  │  ,  │  .  │  /  │     │
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
-         *                   │CT/ES│ SPC │ L2  │   │ L1  │LSHFT│BSPC │
+         *                   │BSPC │ SPC │ L2  │   │ L1  │LSHFT│CT/ES│
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
          */
         colemak_layer {
@@ -58,7 +58,7 @@
                 &kp ESC    &kp Q  &kp W  &kp F      &kp P      &kp B      &kp J  &kp L      &kp U      &kp Y    &kp SQT   &kp RA(S)
                 &kp TAB    &kp A  &kp R  &kp S      &kp T      &kp G      &kp M  &kp N      &kp E      &kp I    &kp O     &kp RET
                 &none      &kp Z  &kp X  &kp C      &kp D      &kp V      &kp K  &kp H      &kp COMMA  &kp DOT  &kp FSLH  &none
-                                         &mt LCTRL ESC  &kp SPACE  &mo 2      &mo 1  &kp LSHFT  &kp BSPC
+                                         &kp BSPC   &kp SPACE  &mo 2      &mo 1  &kp LSHFT  &mt LCTRL ESC
             >;
         };
 
@@ -70,7 +70,7 @@
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
          * │  $  │  -  │  _  │  }  │  )  │  ]  │   │  0  │  1  │  2  │  3  │ KP/ │RA(5)│
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
-         *                   │LCTRL│ SPC │[L2] │   │     │     │     │
+         *                   │BSPC │ SPC │[L2] │   │     │     │CT/ES│
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
          */
         symbols_layer {
@@ -78,7 +78,7 @@
                 &kp CARET  &kp EXCL   &kp AT     &kp HASH   &kp COLON  &kp SEMI    &kp EQUAL        &kp N7  &kp N8  &kp N9  &kp KP_PLUS    &kp TILDE
                 &kp AMPS   &kp BSLH   &kp PIPE   &kp LBRC   &kp LPAR   &kp LBKT    &kp KP_MULTIPLY  &kp N4  &kp N5  &kp N6  &kp KP_MINUS   &kp PRCNT
                 &kp DLLR   &kp MINUS  &kp UNDER  &kp RBRC   &kp RPAR   &kp RBKT    &kp N0           &kp N1  &kp N2  &kp N3  &kp KP_DIVIDE  &kp RA(N5)
-                                                  &mt LCTRL ESC  &kp SPACE  &trans      &none            &none   &none
+                                                  &kp BSPC   &kp SPACE  &trans      &none            &none   &mt LCTRL ESC
             >;
         };
 
@@ -90,7 +90,7 @@
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
          * │     │UNDO │ CUT │COPY │ GUI │PASTE│   │PSCRN│BSPC │ TAB │ APP │ RET │     │
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
-         *                   │LCTRL│ SPC │     │   │[L1] │ MO4 │     │
+         *                   │BSPC │ SPC │     │   │[L1] │ MO4 │CT/ES│
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
          *  SWAP = Alt-Tab swapper
          */
@@ -99,7 +99,7 @@
                 &none     &kp ESC    &kp LA(LEFT)  &kp LC(F)   &kp LA(RIGHT)  &kp INS     &kp PG_UP  &kp HOME  &kp UP    &kp END    &kp CAPS  &none
                 &swapper  &sk LALT   &sk LGUI      &sk LSHFT   &sk LCTRL      &sk RALT    &kp PG_DN  &kp LEFT  &kp DOWN  &kp RIGHT  &kp DEL   &none
                 &none     &kp LC(Z)  &kp LC(X)     &kp LC(C)   &kp LGUI       &kp LC(V)   &kp PSCRN  &kp BSPC  &kp TAB   &kp K_APP  &kp RET   &none
-                                                    &mt LCTRL ESC  &kp SPACE      &none       &trans     &mo 4     &none
+                                                    &kp BSPC   &kp SPACE      &none       &trans     &mo 4     &mt LCTRL ESC
             >;
         };
 
