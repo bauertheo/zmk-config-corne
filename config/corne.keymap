@@ -20,6 +20,7 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/rgb.h>
+#include <dt-bindings/zmk/mouse.h>
 
 / {
     behaviors {
@@ -88,7 +89,7 @@
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
          * │ SWAP│ ALT │ GUI │SHIFT│CTRL │ALTGR│   │PG_DN│LEFT │DOWN │RIGHT│ DEL │     │
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-         * │     │UNDO │ CUT │COPY │ GUI │PASTE│   │PSCRN│BSPC │ TAB │ APP │ RET │     │
+         * │     │UNDO │ CUT │COPY │ GUI │PASTE│   │PSCRN│SCR_D│SCR_U│ APP │     │     │
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
          *                   │BSPC │ SPC │     │   │[L1] │ MO4 │CT/ES│
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
@@ -98,7 +99,7 @@
             bindings = <
                 &none     &kp ESC    &kp LA(LEFT)  &kp LC(F)   &kp LA(RIGHT)  &kp INS     &kp PG_UP  &kp HOME  &kp UP    &kp END    &kp CAPS  &none
                 &swapper  &sk LALT   &sk LGUI      &sk LSHFT   &sk LCTRL      &sk RALT    &kp PG_DN  &kp LEFT  &kp DOWN  &kp RIGHT  &kp DEL   &none
-                &none     &kp LC(Z)  &kp LC(X)     &kp LC(C)   &kp LGUI       &kp LC(V)   &kp PSCRN  &kp BSPC  &kp TAB   &kp K_APP  &kp RET   &none
+                &none     &kp LC(Z)  &kp LC(X)     &kp LC(C)   &kp LGUI       &kp LC(V)   &kp PSCRN  &msc SCRL_DOWN &msc SCRL_UP &kp K_APP  &none     &none
                                                     &kp BSPC   &kp SPACE      &none       &trans     &mo 4     &mt LCTRL ESC
             >;
         };
