@@ -30,6 +30,18 @@
             bindings = <&kt LALT>, <&kp TAB>, <&kt LALT>;
             ignored-key-positions = <15>;
         };
+
+        /* Tap = sticky modifier; hold = plain modifier (released on key release,
+         * no latching). Keeps chord ergonomics via &sk while fixing the case
+         * where a held mod stays latched after release (e.g. Ctrl + scroll zoom).
+         */
+        skh: sticky_or_hold {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&sk>;
+        };
     };
 
     conditional_layers {
@@ -98,7 +110,7 @@
         extend_layer {
             bindings = <
                 &none     &kp ESC    &kp LA(LEFT)  &kp LC(F)   &kp LA(RIGHT)  &kp INS     &kp PG_UP  &kp HOME  &kp UP    &kp END    &kp CAPS  &none
-                &swapper  &sk LALT   &sk LGUI      &sk LSHFT   &sk LCTRL      &sk RALT    &kp PG_DN  &kp LEFT  &kp DOWN  &kp RIGHT  &kp DEL   &none
+                &swapper  &skh LALT LALT  &skh LGUI LGUI  &skh LSHFT LSHFT  &skh LCTRL LCTRL  &skh RALT RALT    &kp PG_DN  &kp LEFT  &kp DOWN  &kp RIGHT  &kp DEL   &none
                 &none     &kp LC(Z)  &kp LC(X)     &kp LC(C)   &kp LGUI       &kp LC(V)   &kp PSCRN  &msc SCRL_DOWN &msc SCRL_UP &kp K_APP  &none     &none
                                                     &kp BSPC   &kp SPACE      &none       &trans     &mo 4     &mt LCTRL ESC
             >;
@@ -118,7 +130,7 @@
         function_layer {
             bindings = <
                 &none  &none       &none          &none          &none         &kp C_AL_CALC    &kp F12  &kp F7  &kp F8  &kp F9  &kp LC(KP_PLUS)   &none
-                &none  &sk LALT    &sk LGUI       &sk LSHFT      &sk LCTRL     &sk RALT         &kp F11  &kp F4  &kp F5  &kp F6  &kp LC(KP_MINUS)  &none
+                &none  &skh LALT LALT  &skh LGUI LGUI  &skh LSHFT LSHFT  &skh LCTRL LCTRL  &skh RALT RALT    &kp F11  &kp F4  &kp F5  &kp F6  &kp LC(KP_MINUS)  &none
                 &none  &kp C_MUTE  &kp C_VOL_DN   &kp LC(LS(C))  &kp C_VOL_UP  &kp LC(LS(V))    &kp F10  &kp F1  &kp F2  &kp F3  &kp LC(N0)        &none
                                                    &none          &none         &none            &none    &none   &none
             >;
