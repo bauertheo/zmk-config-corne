@@ -56,16 +56,19 @@
         /* Sensor-rotate variant that drives &msc (mouse scroll) on each tick.
          * The stock inc_dec_kp only binds to &kp, so we need our own.
          *
-         * tap-ms = 30: the fork's &msc is `behavior-input-two-axis`, which
-         * emits a wheel event every `trigger-period-ms = 16` while pressed.
-         * Default sensor-rotate-var tap-ms = 5 is below that threshold, so
-         * the press would release before any wheel event fires. 30 ms gives
-         * roughly two wheel events per detent. */
+         * tap-ms = 130: the fork's &msc is `behavior-input-two-axis`. Each
+         * tick (every trigger-period-ms = 16) it adds
+         *   move = speed * 16 / 1000 = 10 * 0.016 = 0.16
+         * to a fractional accumulator. Wheel events only fire when the
+         * accumulator crosses an integer boundary, so we need ~7 ticks
+         * (1/0.16 ≈ 6.25) before a single wheel event is emitted — that's
+         * about 112 ms. 130 ms gives a comfortable margin so each detent
+         * produces exactly one scroll line. */
         inc_dec_msc: inc_dec_msc {
             compatible = "zmk,behavior-sensor-rotate-var";
             #sensor-binding-cells = <2>;
             bindings = <&msc>, <&msc>;
-            tap-ms = <30>;
+            tap-ms = <130>;
         };
     };
 
