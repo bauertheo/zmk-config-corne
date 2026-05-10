@@ -54,11 +54,18 @@
         };
 
         /* Sensor-rotate variant that drives &msc (mouse scroll) on each tick.
-         * The stock inc_dec_kp only binds to &kp, so we need our own. */
+         * The stock inc_dec_kp only binds to &kp, so we need our own.
+         *
+         * tap-ms = 30: the fork's &msc is `behavior-input-two-axis`, which
+         * emits a wheel event every `trigger-period-ms = 16` while pressed.
+         * Default sensor-rotate-var tap-ms = 5 is below that threshold, so
+         * the press would release before any wheel event fires. 30 ms gives
+         * roughly two wheel events per detent. */
         inc_dec_msc: inc_dec_msc {
             compatible = "zmk,behavior-sensor-rotate-var";
             #sensor-binding-cells = <2>;
             bindings = <&msc>, <&msc>;
+            tap-ms = <30>;
         };
     };
 
