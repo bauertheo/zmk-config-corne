@@ -1,0 +1,20 @@
+# The side that hosts the PS/2 TrackPoint MUST be the central side.
+# ZMK defaults the LEFT side as central; we invert this so the right half
+# (where the TP is wired) becomes central.
+
+if SHIELD_CORNE_TP_RIGHT
+
+config ZMK_KEYBOARD_NAME
+    default "Corne TP"
+
+config ZMK_SPLIT_ROLE_CENTRAL
+    default y
+
+endif
+
+if SHIELD_CORNE_TP_LEFT || SHIELD_CORNE_TP_RIGHT
+
+config ZMK_SPLIT
+    default y
+
+endif

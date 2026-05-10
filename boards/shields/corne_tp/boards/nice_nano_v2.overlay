@@ -1,0 +1,11 @@
+/*
+ * The upstream Corne shield's nice_nano_v2.overlay binds the WS2812 RGB
+ * underglow to SPI3 / P0.06. P0.06 is now PS/2 SCL on this build, so we
+ * deliberately do not enable WS2812 here. This file exists so this shield's
+ * board overlay overrides the upstream one (Zephyr picks the shield-local
+ * boards/<board>.overlay when a shield by that name is selected).
+ */
+
+&spi3 {
+    status = "disabled";
+};

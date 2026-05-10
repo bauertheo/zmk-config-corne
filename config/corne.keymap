@@ -1,26 +1,37 @@
 /*
- * Colemak-DH layout for Corne (42 keys)
- * Converted from idobao/id75 QMK keymap "standardish_colmak9"
+ * Colemak-DH layout for Corne (42 keys + 2 encoder clicks = 44 positions)
  *
  * Layer structure:
  *   0  Colemak-DH (base)
  *   1  Symbols + Numpad
  *   2  Extend (navigation)
- *   3  Function + Media  (conditional: hold L1 + L2)
- *   4  RGB + Bluetooth
+ *   3  Function + Media        (conditional: hold L1 + L2)
+ *   4  Bluetooth + TP settings entry
+ *   5  Mouse / TrackPoint      (auto-activated by TP movement)
+ *   6  TrackPoint settings     (runtime tuning)
  *
  * Key positions (for ignored-key-positions reference):
  *   Row 0:  0   1   2   3   4   5       6   7   8   9  10  11
  *   Row 1: 12  13  14  15  16  17      18  19  20  21  22  23
  *   Row 2: 24  25  26  27  28  29      30  31  32  33  34  35
  *   Thumb:         36  37  38              39  40  41
+ *   Encoder click:               42                       43
+ *
+ * Encoders (one per side, A/B on D16/D10, click on D8):
+ *   Left  (pos 42):  rotate = horizontal scroll, click = middle mouse
+ *   Right (pos 43):  rotate = vertical scroll,   click = middle mouse
  */
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
-#include <dt-bindings/zmk/rgb.h>
 #include <dt-bindings/zmk/mouse.h>
+
+#define MOUSE_TP      5
+#define MOUSE_TP_SET  6
+
+#define HAS_MOUSE_TP
+#include "../include/mouse_tp.dtsi"
 
 / {
     behaviors {
@@ -33,14 +44,21 @@
 
         /* Tap = sticky modifier; hold = plain modifier (released on key release,
          * no latching). Keeps chord ergonomics via &sk while fixing the case
-         * where a held mod stays latched after release (e.g. Ctrl + scroll zoom).
-         */
+         * where a held mod stays latched after release (e.g. Ctrl + scroll zoom). */
         skh: sticky_or_hold {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             tapping-term-ms = <200>;
             flavor = "tap-preferred";
             bindings = <&kp>, <&sk>;
+        };
+
+        /* Sensor-rotate variant that drives &msc (mouse scroll) on each tick.
+         * The stock inc_dec_kp only binds to &kp, so we need our own. */
+        inc_dec_msc: inc_dec_msc {
+            compatible = "zmk,behavior-sensor-rotate-var";
+            #sensor-binding-cells = <2>;
+            bindings = <&msc>, <&msc>;
         };
     };
 
@@ -65,6 +83,7 @@
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
          *                   │BSPC │ SPC │ L2  │   │ L1  │LSHFT│CT/ES│
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
+         *  Encoders:    L click: MCLK     R click: MCLK
          */
         colemak_layer {
             bindings = <
@@ -72,7 +91,10 @@
                 &kp TAB    &kp A  &kp R  &kp S      &kp T      &kp G      &kp M  &kp N      &kp E      &kp I    &kp O     &kp RET
                 &none      &kp Z  &kp X  &kp C      &kp D      &kp V      &kp K  &kp H      &kp COMMA  &kp DOT  &kp FSLH  &none
                                          &kp BSPC   &kp SPACE  &mo 2      &mo 1  &kp LSHFT  &mt LCTRL ESC
+                                                       &mkp MCLK              &mkp MCLK
             >;
+            sensor-bindings = <&inc_dec_msc SCRL_RIGHT SCRL_LEFT
+                               &inc_dec_msc SCRL_DOWN  SCRL_UP>;
         };
 
         /* Layer 1: Symbols + Numpad
@@ -92,7 +114,10 @@
                 &kp AMPS   &kp BSLH   &kp PIPE   &kp LBRC   &kp LPAR   &kp LBKT    &kp KP_MULTIPLY  &kp N4  &kp N5  &kp N6  &kp KP_MINUS   &kp PRCNT
                 &kp DLLR   &kp MINUS  &kp UNDER  &kp RBRC   &kp RPAR   &kp RBKT    &kp N0           &kp N1  &kp N2  &kp N3  &kp KP_DIVIDE  &kp RA(N5)
                                                   &kp BSPC   &kp SPACE  &trans      &none            &none   &mt LCTRL ESC
+                                                       &mkp MCLK              &mkp MCLK
             >;
+            sensor-bindings = <&inc_dec_msc SCRL_RIGHT SCRL_LEFT
+                               &inc_dec_msc SCRL_DOWN  SCRL_UP>;
         };
 
         /* Layer 2: Extend / Navigation
@@ -113,7 +138,10 @@
                 &swapper  &skh LALT LALT  &skh LGUI LGUI  &skh LSHFT LSHFT  &skh LCTRL LCTRL  &skh RALT RALT    &kp PG_DN  &kp LEFT  &kp DOWN  &kp RIGHT  &kp DEL   &none
                 &none     &kp LC(Z)  &kp LC(X)     &kp LC(C)   &kp LGUI       &kp LC(V)   &kp PSCRN  &msc SCRL_DOWN &msc SCRL_UP &kp K_APP  &none     &none
                                                     &kp BSPC   &kp SPACE      &none       &trans     &mo 4     &mt LCTRL ESC
+                                                       &mkp MCLK              &mkp MCLK
             >;
+            sensor-bindings = <&inc_dec_msc SCRL_RIGHT SCRL_LEFT
+                               &inc_dec_msc SCRL_DOWN  SCRL_UP>;
         };
 
         /* Layer 3: Function + Media (conditional: L1 + L2)
@@ -133,27 +161,79 @@
                 &none  &skh LALT LALT  &skh LGUI LGUI  &skh LSHFT LSHFT  &skh LCTRL LCTRL  &skh RALT RALT    &kp F11  &kp F4  &kp F5  &kp F6  &kp LC(KP_MINUS)  &none
                 &none  &kp C_MUTE  &kp C_VOL_DN   &kp LC(LS(C))  &kp C_VOL_UP  &kp LC(LS(V))    &kp F10  &kp F1  &kp F2  &kp F3  &kp LC(N0)        &none
                                                    &none          &none         &none            &none    &none   &none
+                                                       &mkp MCLK              &mkp MCLK
             >;
+            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN
+                               &inc_dec_kp C_NEXT  C_PREV>;
         };
 
-        /* Layer 4: RGB + Bluetooth
+        /* Layer 4: Bluetooth + TP-settings entry
          * ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
-         * │BTCLR│ BT0 │ BT1 │ BT2 │ BT3 │ BT4 │   │ TOG │ EF- │ BRI+│ EF+ │     │     │
+         * │BTCLR│ BT0 │ BT1 │ BT2 │ BT3 │ BT4 │   │     │     │     │     │     │TPSET│
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-         * │     │     │     │     │     │     │   │ SAT+│ HUE-│ BRI-│ HUE+│     │     │
+         * │     │     │     │     │     │     │   │     │     │     │     │     │     │
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-         * │     │     │     │     │     │     │   │ SAT-│     │     │     │     │     │
+         * │     │     │     │     │     │     │   │     │     │     │     │     │     │
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
          *                   │     │     │     │   │     │     │     │
          *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
          */
-        rgb_bt_layer {
+        bt_layer {
             bindings = <
-                &bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4    &rgb_ug RGB_TOG  &rgb_ug RGB_EFR  &rgb_ug RGB_BRI  &rgb_ug RGB_EFF  &none  &none
-                &none       &none         &none         &none         &none         &none            &rgb_ug RGB_SAI  &rgb_ug RGB_HUD  &rgb_ug RGB_BRD  &rgb_ug RGB_HUI  &none  &none
-                &none       &none         &none         &none         &none         &none            &rgb_ug RGB_SAD  &none            &none            &none            &none  &none
-                                                        &none         &none         &none            &none            &none            &none
+                &bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4    &none  &none  &none  &none  &none  &tog MOUSE_TP_SET
+                &none       &none         &none         &none         &none         &none           &none  &none  &none  &none  &none  &none
+                &none       &none         &none         &none         &none         &none           &none  &none  &none  &none  &none  &none
+                                                        &none         &none         &none           &none  &none  &none
+                                                       &none                  &none
             >;
+            sensor-bindings = <&inc_dec_msc SCRL_RIGHT SCRL_LEFT
+                               &inc_dec_msc SCRL_DOWN  SCRL_UP>;
+        };
+
+        /* Layer 5: Mouse / TrackPoint (auto-activated by TP motion)
+         * Click keys on the thumb cluster, scroll on the home-row index for
+         * vertical-scroll-via-keys when the encoder is not reachable.
+         * ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
+         * │TPSET│     │     │     │SCRLU│     │   │     │SCRLU│     │     │     │TPSET│
+         * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+         * │     │     │     │     │     │     │   │     │     │     │     │     │     │
+         * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+         * │     │     │     │     │SCRLD│     │   │     │SCRLD│     │     │     │     │
+         * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┴─────┴─────┘
+         *                   │ MCLK│ LCLK│ RCLK│   │ MCLK│ LCLK│ RCLK│
+         *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
+         */
+        mouse_tp_layer {
+            bindings = <
+                &tog MOUSE_TP_SET  &trans  &trans  &trans  &msc SCRL_UP    &trans      &trans       &msc SCRL_UP    &trans  &trans  &trans  &tog MOUSE_TP_SET
+                &trans             &trans  &trans  &trans  &trans          &trans      &trans       &trans          &trans  &trans  &trans  &trans
+                &trans             &trans  &trans  &trans  &msc SCRL_DOWN  &trans      &trans       &msc SCRL_DOWN  &trans  &trans  &trans  &trans
+                                                   &mkp MCLK  &mkp LCLK  &mkp RCLK    &mkp MCLK    &mkp LCLK  &mkp RCLK
+                                                       &mkp MCLK              &mkp MCLK
+            >;
+            sensor-bindings = <&inc_dec_msc SCRL_RIGHT SCRL_LEFT
+                               &inc_dec_msc SCRL_DOWN  SCRL_UP>;
+        };
+
+        /* Layer 6: TrackPoint runtime tuning
+         * Macros come from include/mouse_tp.dtsi:
+         *   U_MSS_TP_S_*   sensitivity
+         *   U_MSS_TP_V6_*  upper plateau speed (max accel)
+         *   U_MSS_TP_NI_*  negative inertia
+         *   U_MSS_TP_PT_*  press-to-select threshold
+         *   U_MSS_RESET    wipe flash + restore defaults
+         *   U_MSS_LOG      print current settings to USB log
+         */
+        mouse_tp_set_layer {
+            bindings = <
+                &tog MOUSE_TP_SET  &none  U_MSS_TP_S_D   U_MSS_TP_S_I   U_MSS_TP_PT_I  &none      U_MSS_TP_PT_I  U_MSS_TP_S_D   U_MSS_TP_S_I   &none  &none  &tog MOUSE_TP_SET
+                U_MSS_RESET        &none  U_MSS_TP_NI_D  U_MSS_TP_NI_I  U_MSS_TP_PT_D  &none      U_MSS_TP_PT_D  U_MSS_TP_NI_D  U_MSS_TP_NI_I  &none  &none  U_MSS_RESET
+                U_MSS_LOG          &none  U_MSS_TP_V6_D  U_MSS_TP_V6_I  &none          &none      &none          U_MSS_TP_V6_D  U_MSS_TP_V6_I  &none  &none  U_MSS_LOG
+                                                          &trans         &mkp LCLK      &mkp RCLK  &none          &mkp LCLK      &mkp RCLK
+                                                       &none                  &none
+            >;
+            sensor-bindings = <&inc_dec_msc SCRL_RIGHT SCRL_LEFT
+                               &inc_dec_msc SCRL_DOWN  SCRL_UP>;
         };
     };
 };

@@ -1,0 +1,110 @@
+/*
+ * Corne TP shield base — derived from the upstream Corne shield
+ * (zmk/app/boards/shields/corne/corne.dtsi), with:
+ *   - OLED node removed (no display on this build)
+ *   - kscan-composite added so encoder push-switches can sit alongside the matrix
+ *   - one rotary encoder per half (alps,ec11) declared but disabled — each
+ *     side overlay enables only its own encoder
+ *   - matrix-transform extended with two extra positions for the encoder clicks
+ */
+
+#include <dt-bindings/zmk/matrix_transform.h>
+
+/ {
+    chosen {
+        zmk,kscan = &kscan_composite;
+        zmk,matrix-transform = &default_transform;
+    };
+
+    /*
+     * Composite kscan: physical 4x6 matrix (per side) plus one synthetic row 4
+     * for the encoder push-switches. row-offset=4 places the click event on
+     * row 4. col-offset stays 0; the matrix-transform's per-side col-offset
+     * (set on the right overlay) shifts the right-hand click into col 6.
+     */
+    kscan_composite: kscan_composite {
+        compatible = "zmk,kscan-composite";
+        rows = <5>;
+        columns = <12>;
+
+        matrix {
+            kscan = <&kscan0>;
+        };
+
+        encoder_clicks {
+            kscan = <&kscan_encoder_clicks>;
+            row-offset = <4>;
+        };
+    };
+
+    default_transform: keymap_transform_0 {
+        compatible = "zmk,matrix-transform";
+        columns = <12>;
+        rows = <5>;
+        /*
+         * Rows 0-2: 6 per side (12 cols).
+         * Row 3: 3 thumb keys per side.
+         * Row 4: encoder click — col 0 is left, col 6 is right (after the
+         *        per-side col-offset on the right overlay).
+         */
+        map = <
+RC(0,0) RC(0,1) RC(0,2) RC(0,3) RC(0,4) RC(0,5)  RC(0,6) RC(0,7) RC(0,8) RC(0,9) RC(0,10) RC(0,11)
+RC(1,0) RC(1,1) RC(1,2) RC(1,3) RC(1,4) RC(1,5)  RC(1,6) RC(1,7) RC(1,8) RC(1,9) RC(1,10) RC(1,11)
+RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4) RC(2,5)  RC(2,6) RC(2,7) RC(2,8) RC(2,9) RC(2,10) RC(2,11)
+                        RC(3,3) RC(3,4) RC(3,5)  RC(3,6) RC(3,7) RC(3,8)
+                                        RC(4,0)  RC(4,6)
+        >;
+    };
+
+    kscan0: kscan {
+        compatible = "zmk,kscan-gpio-matrix";
+        wakeup-source;
+
+        diode-direction = "col2row";
+        row-gpios
+            = <&pro_micro 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&pro_micro 5 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&pro_micro 6 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&pro_micro 7 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            ;
+    };
+
+    /*
+     * Encoder push-switch on D8 = P1.04.
+     * Wired through gpio-direct so it produces a (row=0, col=0) event that
+     * the composite shifts to row 4. The per-side overlay does not need to
+     * touch this — both halves use the same pin and the matrix-transform's
+     * col-offset takes care of separating left vs right clicks.
+     */
+    kscan_encoder_clicks: kscan_encoder_clicks {
+        compatible = "zmk,kscan-gpio-direct";
+        wakeup-source;
+        input-gpios
+            = <&pro_micro 8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>
+            ;
+    };
+
+    /* Encoder A on D16 = P0.10, B on D10 = P0.09 — same pins on both halves
+     * for handwiring symmetry. Each side overlay enables only its own. */
+    left_encoder: left_encoder {
+        compatible = "alps,ec11";
+        a-gpios = <&pro_micro 16 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
+        b-gpios = <&pro_micro 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
+        steps = <80>;
+        status = "disabled";
+    };
+
+    right_encoder: right_encoder {
+        compatible = "alps,ec11";
+        a-gpios = <&pro_micro 16 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
+        b-gpios = <&pro_micro 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
+        steps = <80>;
+        status = "disabled";
+    };
+
+    sensors: sensors {
+        compatible = "zmk,keymap-sensors";
+        sensors = <&left_encoder &right_encoder>;
+        triggers-per-rotation = <20>;
+    };
+};

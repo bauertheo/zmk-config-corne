@@ -1,0 +1,183 @@
+/*
+ * Right half — central side, hosts the PS/2 TrackPoint on high-frequency pins.
+ *
+ * Pin assignments (nice!nano v2):
+ *   - SCL: D1  (P0.06) — high-freq
+ *   - SDA: D0  (P0.08) — high-freq, used as UART_RX in pinctrl
+ *   - POR: D9  (P1.06) — low-freq (fine for reset)
+ *
+ * P0.06 was previously used by the upstream Corne shield's WS2812 underglow.
+ * boards/nice_nano_v2.overlay in this shield deliberately omits the WS2812
+ * binding so the pin is free.
+ */
+
+#include "corne_tp.dtsi"
+
+&default_transform {
+    col-offset = <6>;
+};
+
+&kscan0 {
+    col-gpios
+        = <&pro_micro 14 GPIO_ACTIVE_HIGH>
+        , <&pro_micro 15 GPIO_ACTIVE_HIGH>
+        , <&pro_micro 18 GPIO_ACTIVE_HIGH>
+        , <&pro_micro 19 GPIO_ACTIVE_HIGH>
+        , <&pro_micro 20 GPIO_ACTIVE_HIGH>
+        , <&pro_micro 21 GPIO_ACTIVE_HIGH>
+        ;
+};
+
+&right_encoder { status = "okay"; };
+
+
+/*
+ * --------------------------------------------------------------------------
+ * PS/2 mouse / TrackPoint configuration
+ *
+ * Driver: UART (much better than GPIO bit-banging for nrf52). The nrf52 UART
+ * controller is incompatible with the PS/2 transmission frame, so the driver
+ * uses UART for receive only and falls back to GPIO bit-banging for transmit.
+ *
+ * BAUD 14400 corresponds to ~69us cycle length, the closest match to the
+ * 67us cycle that IBM/Lenovo TrackPoints use.
+ * --------------------------------------------------------------------------
+ */
+
+#define MOUSE_PS2_DRIVER_UART
+
+#define MOUSE_PS2_PIN_SCL_PRO_MICRO  <&pro_micro 1 GPIO_ACTIVE_HIGH>
+#define MOUSE_PS2_PIN_SDA_PRO_MICRO  <&pro_micro 0 GPIO_ACTIVE_HIGH>
+#define MOUSE_PS2_PIN_RST_PRO_MICRO  <&pro_micro 9 GPIO_ACTIVE_HIGH>
+
+/* SDA in pinctrl notation. Must match SDA pro_micro pin (D0 = P0.08). */
+#define MOUSE_PS2_PIN_SDA_PINCTRL    <NRF_PSEL(UART_RX, 0, 8)>
+
+#define MOUSE_PS2_UART_BAUD_RATE     <14400>
+
+/* Unexposed nrf52 pins used as parking spots when the UART controller is not
+ * driving SDA — required so we can switch the SDA line between UART RX and
+ * GPIO without leaving the UART driving an exposed pin. */
+#define MOUSE_PS2_PIN_UNEXPOSED_TX   <NRF_PSEL(UART_TX, 0, 27)>
+#define MOUSE_PS2_PIN_UNEXPOSED_RX   <NRF_PSEL(UART_RX, 0, 28)>
+
+
+/*
+ * Interrupt priority overrides — generated for nice_nano_v2 by the helper
+ * script in the PS/2 driver module repo. PS/2 events must be processed
+ * within 30-50us; we promote GPIOTE to priority 0 and demote everything else
+ * to 3 so PS/2 interrupts are not preempted by BT or other peripherals.
+ */
+&gpiote { interrupts = <6 0>; };
+&clock      { interrupts = <0 3>; };
+&power      { interrupts = <0 3>; };
+&radio      { interrupts = <1 3>; };
+&uart0      { interrupts = <2 3>; };
+&i2c0       { interrupts = <3 3>; };
+&spi0       { interrupts = <3 3>; };
+&i2c1       { interrupts = <4 3>; };
+&spi1       { interrupts = <4 3>; };
+&nfct       { interrupts = <5 3>; };
+&adc        { interrupts = <7 3>; };
+&timer0     { interrupts = <8 3>; };
+&timer1     { interrupts = <9 3>; };
+&timer2     { interrupts = <10 3>; };
+&rtc0       { interrupts = <11 3>; };
+&temp       { interrupts = <12 3>; };
+&rng        { interrupts = <13 3>; };
+&ecb        { interrupts = <14 3>; };
+&ccm        { interrupts = <15 3>; };
+&wdt        { interrupts = <16 3>; };
+&rtc1       { interrupts = <17 3>; };
+&qdec       { interrupts = <18 3>; };
+&comp       { interrupts = <19 3>; };
+&egu0       { interrupts = <20 3>; };
+&egu1       { interrupts = <21 3>; };
+&egu2       { interrupts = <22 3>; };
+&egu3       { interrupts = <23 3>; };
+&egu4       { interrupts = <24 3>; };
+&egu5       { interrupts = <25 3>; };
+&timer3     { interrupts = <26 3>; };
+&timer4     { interrupts = <27 3>; };
+&pwm0       { interrupts = <28 3>; };
+&pdm0       { interrupts = <29 3>; };
+&pwm1       { interrupts = <33 3>; };
+&pwm2       { interrupts = <34 3>; };
+&spi2       { interrupts = <35 3>; };
+&rtc2       { interrupts = <36 3>; };
+&i2s0       { interrupts = <37 3>; };
+&usbd       { interrupts = <39 3>; };
+&uart1      { interrupts = <40 3>; };
+&qspi       { interrupts = <41 3>; };
+&pwm3       { interrupts = <45 3>; };
+&spi3       { interrupts = <47 3>; };
+&cryptocell { interrupts = <42 3>; };
+
+
+/* This define lets the keymap know that the PS/2 nodes exist on this side,
+ * so the mouse_tp.dtsi include can guard side-specific node references. */
+#define MOUSE_PS2_DT_PRESENT
+
+&pinctrl {
+    /* RX state: TX parked on an unexposed pin, RX on the SDA line. */
+    uart0_ps2_default: uart0_ps2_default {
+        group1 {
+            psels = MOUSE_PS2_PIN_UNEXPOSED_TX,
+                    MOUSE_PS2_PIN_SDA_PINCTRL;
+        };
+    };
+
+    uart0_ps2_sleep: uart0_ps2_sleep {
+        group1 {
+            psels = MOUSE_PS2_PIN_UNEXPOSED_TX,
+                    MOUSE_PS2_PIN_SDA_PINCTRL;
+            low-power-enable;
+        };
+    };
+
+    /* TX state: both UART pins parked on unexposed pins so the SDA line is
+     * free for GPIO bit-banging. */
+    uart0_ps2_off: uart0_ps2_off {
+        group1 {
+            psels = MOUSE_PS2_PIN_UNEXPOSED_TX,
+                    MOUSE_PS2_PIN_UNEXPOSED_RX;
+        };
+    };
+};
+
+&uart0 {
+    status = "disabled";
+    compatible = "nordic,nrf-uarte";
+
+    current-speed = MOUSE_PS2_UART_BAUD_RATE;
+    pinctrl-0 = <&uart0_ps2_default>;
+    pinctrl-1 = <&uart0_ps2_off>;
+    pinctrl-names = "default", "sleep";
+
+    uart_ps2: uart_ps2 {
+        status = "disabled";
+        compatible = "uart-ps2";
+        scl-gpios = MOUSE_PS2_PIN_SCL_PRO_MICRO;
+        sda-gpios = MOUSE_PS2_PIN_SDA_PRO_MICRO;
+    };
+};
+
+/ {
+    mouse_ps2: mouse_ps2 {
+        status = "disabled";
+        compatible = "zmk,input-mouse-ps2";
+
+        ps2-device = <&uart_ps2>;
+        rst-gpios = MOUSE_PS2_PIN_RST_PRO_MICRO;
+    };
+
+    mouse_ps2_input_listener: mouse_ps2_input_listener {
+        compatible = "zmk,input-listener-ps2";
+        status = "disabled";
+
+        device = <&mouse_ps2>;
+        /* layer-toggle, layer-toggle-delay-ms, layer-toggle-timeout-ms are
+         * set in include/mouse_tp.dtsi (which knows about the keymap layer
+         * indices). */
+    };
+};

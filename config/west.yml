@@ -1,15 +1,20 @@
 manifest:
-  defaults:
-    revision: v0.3
   remotes:
-    - name: zmkfirmware
-      url-base: https://github.com/zmkfirmware
+    - name: infused-kim
+      url-base: https://github.com/infused-kim
     - name: dhruvinsh
       url-base: https://github.com/dhruvinsh
   projects:
+    # infused-kim's ZMK fork — the only one currently confirmed compatible with
+    # the kb_zmk_ps2_mouse_trackpoint_driver module. Re-evaluate after the
+    # upstream pointing-device PR merges.
     - name: zmk
-      remote: zmkfirmware
+      remote: infused-kim
+      revision: pr-testing/mouse_ps2_module_base
       import: app/west.yml
+    - name: kb_zmk_ps2_mouse_trackpoint_driver
+      remote: infused-kim
+      revision: main
     - name: zmk-tri-state
       remote: dhruvinsh
       revision: main

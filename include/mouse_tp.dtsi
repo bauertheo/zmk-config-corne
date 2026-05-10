@@ -1,0 +1,80 @@
+/*
+ * TrackPoint helper macros and side-conditional devicetree overrides.
+ * Adapted verbatim from the reference repo (kb_zmk_ps2_mouse_trackpoint_driver
+ * zmk-config), with the keymap-side layer index kept as `MOUSE_TP` so the
+ * keymap file controls which layer auto-activates on TP movement.
+ *
+ * Requires `MOUSE_TP` to be defined as the layer index before this file is
+ * included.
+ */
+
+#ifdef HAS_MOUSE_TP
+  #include <dt-bindings/zmk/mouse.h>
+  #include <dt-bindings/zmk/mouse_settings.h>
+  #include <behaviors/mouse_keys.dtsi>
+  #include <behaviors/mouse_setting.dtsi>
+
+
+  /* Runtime TP setting tweaks (saved to flash after CONFIG_ZMK_SETTINGS_SAVE_DEBOUNCE). */
+
+  #define U_MSS_TP_S_I  &mms MS_TP_SENSITIVITY_INCR
+  #define U_MSS_TP_S_D  &mms MS_TP_SENSITIVITY_DECR
+
+  #define U_MSS_TP_V6_I &mms MS_TP_VALUE6_INCR
+  #define U_MSS_TP_V6_D &mms MS_TP_VALUE6_DECR
+
+  #define U_MSS_TP_NI_I &mms MS_TP_NEG_INERTIA_INCR
+  #define U_MSS_TP_NI_D &mms MS_TP_NEG_INERTIA_DECR
+
+  #define U_MSS_TP_PT_I &mms MS_TP_PTS_THRESHOLD_INCR
+  #define U_MSS_TP_PT_D &mms MS_TP_PTS_THRESHOLD_DECR
+
+  #define U_MSS_RESET   &mms MS_RESET
+  #define U_MSS_LOG     &mms MS_LOG
+
+
+  /* Side-conditional config: only apply on the half that has the PS/2 nodes
+   * (set by `#define MOUSE_PS2_DT_PRESENT` in corne_tp_right.overlay). */
+  #ifdef MOUSE_PS2_DT_PRESENT
+
+    &mouse_ps2_input_listener {
+        layer-toggle = <MOUSE_TP>;
+        layer-toggle-delay-ms = <250>;
+        layer-toggle-timeout-ms = <250>;
+    };
+
+    &mouse_ps2 {
+        /* Tunable settings are intentionally left at defaults; tune at runtime
+         * via MOUSE_TP_SET layer keys, then U_MSS_LOG dumps the values to USB
+         * log. Copy them back here once a good config is found. */
+    };
+
+    &mouse_ps2 {
+        status = "okay";
+    };
+
+    &mouse_ps2_input_listener {
+        status = "okay";
+    };
+
+    #ifdef MOUSE_PS2_DRIVER_UART
+
+      &uart0 {
+          status = "okay";
+      };
+
+      &uart_ps2 {
+          status = "okay";
+      };
+
+    #else
+
+      &gpio_ps2 {
+          status = "okay";
+      };
+
+    #endif
+
+  #endif /* MOUSE_PS2_DT_PRESENT */
+
+#endif /* HAS_MOUSE_TP */

@@ -1,0 +1,13 @@
+file_format: "1"
+id: corne_tp
+name: Corne TP
+type: shield
+url: https://github.com/foostan/crkbd/
+requires: [pro_micro]
+features:
+  - keys
+  - encoder
+  - pointer
+siblings:
+  - corne_tp_left
+  - corne_tp_right
