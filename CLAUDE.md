@@ -15,7 +15,7 @@ The west manifest pulls **`infused-kim/zmk@pr-testing/mouse_ps2_module_base`** (
 ## Key Files
 
 - `config/corne_tp.keymap` — Keymap (7 layers, custom behaviors, encoder sensor-bindings)
-- `config/corne.conf` — Kconfig: mouse, PS/2, USB logging, BT TX power, power management
+- `config/corne_tp.conf` — Kconfig: mouse, PS/2, USB logging, BT TX power, power management. Filename must match shield (`corne_tp`) — ZMK's conf discovery looks for `<shield>.conf`, not `corne.conf`.
 - `config/west.yml` — West manifest (infused-kim ZMK fork + PS/2 driver module + dhruvinsh/zmk-tri-state)
 - `build.yaml` — GitHub Actions build matrix
 - `boards/shields/corne_tp/` — Local shield (replaces upstream Corne):
