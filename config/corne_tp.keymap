@@ -31,7 +31,7 @@
 #define MOUSE_TP_SET  6
 
 #define HAS_MOUSE_TP
-#include "../include/mouse_tp.dtsi"
+#include "include/mouse_tp.dtsi"
 
 / {
     behaviors {
