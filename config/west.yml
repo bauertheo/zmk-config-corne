@@ -17,6 +17,9 @@ manifest:
       revision: main
     - name: zmk-tri-state
       remote: dhruvinsh
-      revision: main
+      # Pinned: later commits add `binding_event.source`, a field that does
+      # not exist on the infused-kim/zmk@pr-testing/mouse_ps2_module_base
+      # fork (zephyr v3.5.0+zmk-fixes, April 2024).
+      revision: 9e44394
   self:
     path: config
