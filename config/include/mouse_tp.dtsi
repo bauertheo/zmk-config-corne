@@ -41,6 +41,10 @@
         layer-toggle = <MOUSE_TP>;
         layer-toggle-delay-ms = <250>;
         layer-toggle-timeout-ms = <250>;
+        /* TP module is mounted with its native +Y axis pointing toward the
+         * user; flip Y so cursor up means physical away. X is already
+         * correct. */
+        y-invert;
     };
 
     &mouse_ps2 {
