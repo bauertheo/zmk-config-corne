@@ -226,13 +226,25 @@
         };
 
         /* Layer 6: TrackPoint runtime tuning
-         * Macros come from include/mouse_tp.dtsi:
-         *   U_MSS_TP_S_*   sensitivity
-         *   U_MSS_TP_V6_*  upper plateau speed (max accel)
-         *   U_MSS_TP_NI_*  negative inertia
-         *   U_MSS_TP_PT_*  press-to-select threshold
-         *   U_MSS_RESET    wipe flash + restore defaults
-         *   U_MSS_LOG      print current settings to USB log
+         * ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
+         * │TPSET│     │SENS-│SENS+│PTS+ │     │   │PTS+ │SENS-│SENS+│     │     │TPSET│
+         * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+         * │RESET│     │ NI- │ NI+ │PTS- │     │   │PTS- │ NI- │ NI+ │     │     │RESET│
+         * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
+         * │ LOG │     │ V6- │ V6+ │     │     │   │     │ V6- │ V6+ │     │     │ LOG │
+         * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
+         *                   │     │ LCLK│ RCLK│   │     │ LCLK│ RCLK│
+         *                   └─────┴─────┴─────┘   └─────┴─────┴─────┘
+         *  TPSET = toggle out of this layer (top corners on both sides)
+         *  SENS  = sensitivity (U_MSS_TP_S_*)
+         *  V6    = transfer-function upper plateau / max accel (U_MSS_TP_V6_*)
+         *  NI    = negative inertia, fights post-release drift (U_MSS_TP_NI_*)
+         *  PTS   = press-to-select threshold (U_MSS_TP_PT_*) — only effective
+         *          if `tp-press-to-select;` is enabled in DT (it isn't here)
+         *  RESET = wipe flash settings + restore TP firmware defaults
+         *  LOG   = dump current &mouse_ps2 { ... } block to USB serial
+         *  LCLK / RCLK on the thumbs are left/right mouse buttons; the encoders
+         *  are intentionally inert on this layer.
          */
         mouse_tp_set_layer {
             bindings = <
