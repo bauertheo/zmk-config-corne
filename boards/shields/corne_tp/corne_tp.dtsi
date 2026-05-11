@@ -85,12 +85,19 @@ RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4) RC(2,5)  RC(2,6) RC(2,7) RC(2,8) RC(2,9)
     };
 
     /* Encoder A on D16 = P0.10, B on D10 = P0.09 — same pins on both halves
-     * for handwiring symmetry. Each side overlay enables only its own. */
+     * for handwiring symmetry. Each side overlay enables only its own.
+     *
+     * steps = <40>: the MEH01 (Kailh 5 mm mouse encoder) emits 2 quadrature
+     * transitions per detent click, not 4 like a tactile EC11. Verified
+     * empirically: with the previous steps=<80>, 10 physical detents
+     * produced 5 wheel events (4 transitions per trigger × 2 transitions
+     * per detent = 8 transitions per trigger = 2 detents per trigger).
+     * Halving steps to 40 gives 1 detent = 1 trigger = 1 wheel event. */
     left_encoder: left_encoder {
         compatible = "alps,ec11";
         a-gpios = <&pro_micro 16 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         b-gpios = <&pro_micro 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-        steps = <80>;
+        steps = <40>;
         status = "disabled";
     };
 
@@ -98,7 +105,7 @@ RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4) RC(2,5)  RC(2,6) RC(2,7) RC(2,8) RC(2,9)
         compatible = "alps,ec11";
         a-gpios = <&pro_micro 16 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         b-gpios = <&pro_micro 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
-        steps = <80>;
+        steps = <40>;
         status = "disabled";
     };
 
