@@ -25,6 +25,18 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
+
+/* Boost the scroll value baked into SCRL_UP / SCRL_DOWN / SCRL_LEFT /
+ * SCRL_RIGHT from the fork's default of 10 to 50. This is the
+ * community-standard fix (cf. urob/zmk-config and others) for the
+ * "encoder scroll feels sluggish and lags after release" problem:
+ * higher speed = the &msc input-two-axis behavior crosses its 1.0
+ * accumulator threshold faster, so each press emits more wheel events
+ * per millisecond. Combined with the lower tap-ms below, fast spinning
+ * no longer queues up a backlog. Must be defined BEFORE the mouse.h
+ * include because SCRL_* macros expand at that point. */
+#define ZMK_MOUSE_DEFAULT_SCRL_VAL 50
+
 #include <dt-bindings/zmk/mouse.h>
 
 #define MOUSE_TP      5
@@ -56,19 +68,21 @@
         /* Sensor-rotate variant that drives &msc (mouse scroll) on each tick.
          * The stock inc_dec_kp only binds to &kp, so we need our own.
          *
-         * tap-ms = 130: the fork's &msc is `behavior-input-two-axis`. Each
-         * tick (every trigger-period-ms = 16) it adds
-         *   move = speed * 16 / 1000 = 10 * 0.016 = 0.16
-         * to a fractional accumulator. Wheel events only fire when the
-         * accumulator crosses an integer boundary, so we need ~7 ticks
-         * (1/0.16 ≈ 6.25) before a single wheel event is emitted — that's
-         * about 112 ms. 130 ms gives a comfortable margin so each detent
-         * produces exactly one scroll line. */
+         * tap-ms = 40: with ZMK_MOUSE_DEFAULT_SCRL_VAL bumped to 50, each
+         * 16 ms tick of the &msc input-two-axis behavior adds
+         *   move = speed * 16 / 1000 = 50 * 0.016 = 0.80
+         * to its fractional accumulator. The integer threshold (1.0) is
+         * crossed every 2 ticks → one wheel event per ~32 ms. A 40 ms
+         * tap-ms covers that with a small margin and emits 1 wheel event
+         * per detent. Crucially, the behavior_queue can drain queued
+         * trigger pairs every 40 ms instead of every 130 ms, so spinning
+         * the encoder fast no longer produces a multi-second scroll tail
+         * after the user stops. */
         inc_dec_msc: inc_dec_msc {
             compatible = "zmk,behavior-sensor-rotate-var";
             #sensor-binding-cells = <2>;
             bindings = <&msc>, <&msc>;
-            tap-ms = <130>;
+            tap-ms = <40>;
         };
     };
 
