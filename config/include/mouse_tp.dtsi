@@ -50,7 +50,17 @@
     &mouse_ps2 {
         /* Tunable settings are intentionally left at defaults; tune at runtime
          * via MOUSE_TP_SET layer keys, then U_MSS_LOG dumps the values to USB
-         * log. Copy them back here once a good config is found. */
+         * log. Copy them back here once a good config is found.
+         *
+         * tp-press-to-select: enables the TP's Z-axis pressure detection.
+         * Pressing hard on the cap triggers a left-click. Used here to feel
+         * out what threshold corresponds to "finger present" vs "deliberate
+         * press", as a precursor to a possible PTS-as-finger-gate workaround
+         * for the Y-axis drift. Adjust the threshold at runtime via the
+         * U_MSS_TP_PT_I / U_MSS_TP_PT_D keys on layer 6 (PTS+ / PTS- in the
+         * diagram). Threshold is intentionally NOT set here so runtime
+         * changes via &mms persist to flash. */
+        tp-press-to-select;
     };
 
     &mouse_ps2 {
