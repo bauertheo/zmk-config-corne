@@ -229,7 +229,7 @@
          * ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
          * │TPSET│     │SENS-│SENS+│PTS+ │     │   │PTS+ │SENS-│SENS+│     │     │TPSET│
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
-         * │RESET│     │ NI- │ NI+ │PTS- │     │   │PTS- │ NI- │ NI+ │     │     │RESET│
+         * │RESET│     │ NI- │ NI+ │PTS- │     │   │PTS- │ NI- │ NI+ │     │RCAL │RESET│
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
          * │ LOG │     │ V6- │ V6+ │     │     │   │     │ V6- │ V6+ │     │     │ LOG │
          * └─────┴─────┴─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┴─────┴─────┘
@@ -242,6 +242,9 @@
          *  PTS   = press-to-select threshold (U_MSS_TP_PT_*) — only effective
          *          if `tp-press-to-select;` is enabled in DT (it isn't here)
          *  RESET = wipe flash settings + restore TP firmware defaults
+         *  RCAL  = recalibrate TP via &sys_reset: tap with hand OFF the TP to
+         *          re-zero the strain-gauge baseline (settings preserved;
+         *          costs a ~3 s BT reconnect while the central reboots)
          *  LOG   = dump current &mouse_ps2 { ... } block to USB serial
          *  LCLK / RCLK on the thumbs are left/right mouse buttons; the encoders
          *  are intentionally inert on this layer.
@@ -249,7 +252,7 @@
         mouse_tp_set_layer {
             bindings = <
                 &tog MOUSE_TP_SET  &none  U_MSS_TP_S_D   U_MSS_TP_S_I   U_MSS_TP_PT_I  &none      U_MSS_TP_PT_I  U_MSS_TP_S_D   U_MSS_TP_S_I   &none  &none  &tog MOUSE_TP_SET
-                U_MSS_RESET        &none  U_MSS_TP_NI_D  U_MSS_TP_NI_I  U_MSS_TP_PT_D  &none      U_MSS_TP_PT_D  U_MSS_TP_NI_D  U_MSS_TP_NI_I  &none  &none  U_MSS_RESET
+                U_MSS_RESET        &none  U_MSS_TP_NI_D  U_MSS_TP_NI_I  U_MSS_TP_PT_D  &none      U_MSS_TP_PT_D  U_MSS_TP_NI_D  U_MSS_TP_NI_I  &none  &sys_reset  U_MSS_RESET
                 U_MSS_LOG          &none  U_MSS_TP_V6_D  U_MSS_TP_V6_I  &none          &none      &none          U_MSS_TP_V6_D  U_MSS_TP_V6_I  &none  &none  U_MSS_LOG
                                                           &trans         &mkp LCLK      &mkp RCLK  &none          &mkp LCLK      &mkp RCLK
                                                        &none                  &none
