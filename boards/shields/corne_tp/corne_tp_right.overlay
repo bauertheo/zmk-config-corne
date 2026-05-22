@@ -67,7 +67,14 @@
  * script in the PS/2 driver module repo. PS/2 events must be processed
  * within 30-50us; we promote GPIOTE to priority 0 and demote everything else
  * to 3 so PS/2 interrupts are not preempted by BT or other peripherals.
+ *
+ * EXPERIMENT 3: the block is gated to `#if 0` while testing whether the
+ * priority remap is what breaks BT recovery after deep-sleep wake. With
+ * EXPERIMENT_NO_PS2 set in the keymap, PS/2 isn't running anyway, so the
+ * remap has no purpose and only risks starving the Nordic SoftDevice's
+ * RADIO / RTC0 / TIMER0 interrupts on wake. Flip back to `#if 1` to restore.
  */
+#if 0
 &gpiote { interrupts = <6 0>; };
 &clock      { interrupts = <0 3>; };
 &power      { interrupts = <0 3>; };
@@ -112,6 +119,7 @@
 &pwm3       { interrupts = <45 3>; };
 &spi3       { interrupts = <47 3>; };
 &cryptocell { interrupts = <42 3>; };
+#endif
 
 
 /* This define lets the keymap know that the PS/2 nodes exist on this side,
