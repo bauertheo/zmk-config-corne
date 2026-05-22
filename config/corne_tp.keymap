@@ -42,6 +42,13 @@
 #define MOUSE_TP      5
 #define MOUSE_TP_SET  6
 
+/* EXPERIMENT: disable the PS/2 TrackPoint stack to test whether the
+ * deep-sleep / BT-reconnect failure and the fast battery drain (~2 days)
+ * are caused by the PS/2 driver. Encoders + matrix stay fully active.
+ * Layer 6 U_MSS_* keys become &none in this mode. Revert by deleting
+ * this single line. */
+#define EXPERIMENT_NO_PS2
+
 #define HAS_MOUSE_TP
 #include "include/mouse_tp.dtsi"
 
