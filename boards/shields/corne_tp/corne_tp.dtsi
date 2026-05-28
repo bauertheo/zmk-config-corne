@@ -12,36 +12,46 @@
 
 / {
     chosen {
-        zmk,kscan = &kscan_composite;
+        /*
+         * EXPERIMENT: chosen kscan is the matrix directly, not the composite.
+         *   - This fork's zmk,kscan-composite.yaml binding does not accept the
+         *     wakeup-source property, so we cannot make the composite itself
+         *     wakeup-capable in DT.
+         *   - kscan_composite_disable_callback cascades SUSPEND to its children
+         *     and forcibly clears wakeup-enable on them — so even pointing the
+         *     physical-layout at &kscan0 would lose wakeup once composite is
+         *     suspended.
+         *   - Bypassing the composite (and disabling its node below) cleanly
+         *     proves whether the physical-layout + wakeup-enable mechanism
+         *     restores System-OFF wake.
+         * Side effect: encoder push-switches stop firing (no composite to
+         * route kscan_encoder_clicks events into the keymap). Encoder rotation
+         * still works (separate sensor path). Acceptable for this test.
+         */
+        zmk,kscan = &kscan0;
         zmk,matrix-transform = &default_transform;
         /*
-         * Without a zmk,physical-layout pointing at a layout whose kscan
-         * resolves to a wakeup-capable device, zmk_physical_layouts_init
-         * (app/src/physical_layouts.c) never calls pm_device_wakeup_enable()
-         * on any kscan. That in turn means zmk_pm_suspend_devices()
-         * (app/src/pm.c) does NOT skip the kscan during deep-sleep entry —
-         * the matrix driver disconnects its GPIOs and SENSE is disarmed, so
-         * the chip cannot wake from System OFF. Stock corne.dtsi sets this
-         * pointer; we have to set it explicitly for the corne_tp shield.
+         * physical-layout pointer is what makes zmk_physical_layouts_init
+         * (app/src/physical_layouts.c:472-481) call pm_device_wakeup_enable()
+         * on the layout's kscan at boot. With it set and kscan0 wakeup-capable
+         * (wakeup-source declared on the kscan-gpio-matrix node below),
+         * zmk_pm_suspend_devices (app/src/pm.c:46) skips kscan0 on deep-sleep
+         * entry — GPIO interrupts stay armed, SENSE wakes the chip from
+         * System OFF on the next key press.
          */
         zmk,physical-layout = &corne_tp_layout;
     };
 
     /*
-     * Composite kscan: physical 4x6 matrix (per side) plus one synthetic row 4
-     * for the encoder push-switches. row-offset=4 places the click event on
-     * row 4. col-offset stays 0; the matrix-transform's per-side col-offset
-     * (set on the right overlay) shifts the right-hand click into col 6.
-     *
-     * wakeup-source: required so pm_device_wakeup_is_capable() returns true
-     * for the composite. The composite's RESUME callback then propagates the
-     * wakeup-enabled flag to its children (kscan0, kscan_encoder_clicks),
-     * which together keep their GPIO interrupts armed across deep sleep so
-     * SENSE wakes the chip from System OFF on the next key press.
+     * Composite kscan kept declared so the device tree compiles cleanly
+     * (corne_tp.dtsi is shared by both side overlays which reference these
+     * labels), but disabled so it isn't instantiated as a Zephyr device.
+     * No device → no PM action → no cascading suspend that would clobber the
+     * wakeup-enable on kscan0.
      */
     kscan_composite: kscan_composite {
         compatible = "zmk,kscan-composite";
-        wakeup-source;
+        status = "disabled";
         rows = <5>;
         columns = <12>;
 
