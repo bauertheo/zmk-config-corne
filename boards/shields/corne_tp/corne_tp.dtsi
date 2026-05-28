@@ -14,6 +14,17 @@
     chosen {
         zmk,kscan = &kscan_composite;
         zmk,matrix-transform = &default_transform;
+        /*
+         * Without a zmk,physical-layout pointing at a layout whose kscan
+         * resolves to a wakeup-capable device, zmk_physical_layouts_init
+         * (app/src/physical_layouts.c) never calls pm_device_wakeup_enable()
+         * on any kscan. That in turn means zmk_pm_suspend_devices()
+         * (app/src/pm.c) does NOT skip the kscan during deep-sleep entry —
+         * the matrix driver disconnects its GPIOs and SENSE is disarmed, so
+         * the chip cannot wake from System OFF. Stock corne.dtsi sets this
+         * pointer; we have to set it explicitly for the corne_tp shield.
+         */
+        zmk,physical-layout = &corne_tp_layout;
     };
 
     /*
@@ -21,9 +32,16 @@
      * for the encoder push-switches. row-offset=4 places the click event on
      * row 4. col-offset stays 0; the matrix-transform's per-side col-offset
      * (set on the right overlay) shifts the right-hand click into col 6.
+     *
+     * wakeup-source: required so pm_device_wakeup_is_capable() returns true
+     * for the composite. The composite's RESUME callback then propagates the
+     * wakeup-enabled flag to its children (kscan0, kscan_encoder_clicks),
+     * which together keep their GPIO interrupts armed across deep sleep so
+     * SENSE wakes the chip from System OFF on the next key press.
      */
     kscan_composite: kscan_composite {
         compatible = "zmk,kscan-composite";
+        wakeup-source;
         rows = <5>;
         columns = <12>;
 
@@ -35,6 +53,19 @@
             kscan = <&kscan_encoder_clicks>;
             row-offset = <4>;
         };
+    };
+
+    /*
+     * Minimal physical-layout. The `kscan` property is omitted, so it falls
+     * back to the chosen zmk,kscan (= &kscan_composite). The `keys` array is
+     * also omitted — we don't need ZMK Studio key-position metadata for the
+     * deep-sleep wake path, only the layout-to-kscan link that triggers
+     * pm_device_wakeup_enable() at init.
+     */
+    corne_tp_layout: corne_tp_layout {
+        compatible = "zmk,physical-layout";
+        display-name = "Corne TP";
+        transform = <&default_transform>;
     };
 
     default_transform: keymap_transform_0 {
