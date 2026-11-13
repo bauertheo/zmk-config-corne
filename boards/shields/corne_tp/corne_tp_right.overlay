@@ -16,8 +16,8 @@
  * (uart0 / uart_ps2 / mouse_ps2 / listener stay disabled), the interrupt-
  * priority remap below is skipped, and the layer-6 U_MSS_* keys become
  * &none. The module itself still sits on the switched VCC rail; use the
- * EPTOG key on layer 4 to cut its power. Delete this line to re-enable
- * the TrackPoint (and toggle VCC back on with EPTOG if it was turned off).
+ * EPOFF key on layer 4 to cut its power. Delete this line to re-enable
+ * the TrackPoint (and press EPON if VCC was switched off).
  *
  * Disabled because the current module drifts badly and needs replacing.
  */

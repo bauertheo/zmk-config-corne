@@ -6,7 +6,7 @@
  *   1  Symbols + Numpad
  *   2  Extend (navigation)
  *   3  Function + Media        (conditional: hold L1 + L2)
- *   4  Bluetooth + TP settings entry
+ *   4  Bluetooth + TP settings entry + VCC rail on/off (EPON/EPOFF)
  *   5  Mouse / TrackPoint      (auto-activated by TP movement)
  *   6  TrackPoint settings     (runtime tuning)
  *
@@ -192,12 +192,14 @@
                                &inc_dec_kp C_NEXT  C_PREV>;
         };
 
-        /* Layer 4: Bluetooth + TP-settings entry + external power toggle
-         * EPTOG = &ext_power EP_TOG: switches the nice!nano VCC rail (P0.13)
-         * on both halves. The TrackPoint is powered from VCC, so this cuts
-         * its supply entirely. State is persisted to flash.
+        /* Layer 4: Bluetooth + TP-settings entry + external power on/off
+         * EPON / EPOFF = &ext_power EP_ON / EP_OFF: switch the nice!nano VCC
+         * rail (P0.13) on both halves. The TrackPoint is powered from VCC, so
+         * EPOFF cuts its supply entirely. Explicit on/off instead of a toggle
+         * so the result never depends on the state persisted in flash. The
+         * state is saved ~60 s after the press (settings save debounce).
          * ┌─────┬─────┬─────┬─────┬─────┬─────┐   ┌─────┬─────┬─────┬─────┬─────┬─────┐
-         * │BTCLR│ BT0 │ BT1 │ BT2 │ BT3 │ BT4 │   │     │     │     │     │EPTOG│TPSET│
+         * │BTCLR│ BT0 │ BT1 │ BT2 │ BT3 │ BT4 │   │     │     │     │EPON │EPOFF│TPSET│
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
          * │     │     │     │     │     │     │   │     │     │     │     │     │     │
          * ├─────┼─────┼─────┼─────┼─────┼─────┤   ├─────┼─────┼─────┼─────┼─────┼─────┤
@@ -208,7 +210,7 @@
          */
         bt_layer {
             bindings = <
-                &bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4    &none  &none  &none  &none  &ext_power EP_TOG  &tog MOUSE_TP_SET
+                &bt BT_CLR  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4    &none  &none  &none  &ext_power EP_ON  &ext_power EP_OFF  &tog MOUSE_TP_SET
                 &none       &none         &none         &none         &none         &none           &none  &none  &none  &none  &none  &none
                 &none       &none         &none         &none         &none         &none           &none  &none  &none  &none  &none  &none
                                                         &none         &none         &none           &none  &none  &none

@@ -52,7 +52,7 @@ The west manifest pulls **`infused-kim/zmk@pr-testing/mouse_ps2_module_base`** (
 | 1 | Symbols + Numpad | Right thumb `mo 1` |
 | 2 | Extend / Navigation | Left inner thumb `mo 2` |
 | 3 | Function + Media | **Conditional**: hold L1 + L2 simultaneously |
-| 4 | Bluetooth + TP-set entry + `EP_TOG` (VCC rail) | `mo 4` from layer 2 |
+| 4 | Bluetooth + TP-set entry + `EP_ON`/`EP_OFF` (VCC rail) | `mo 4` from layer 2 |
 | 5 | Mouse / TrackPoint | **Auto-activated** by TP movement (250 ms debounce) |
 | 6 | TrackPoint settings | `&tog 6` from layers 4 and 5 |
 
@@ -104,9 +104,9 @@ Left:  mt(LCTRL,ESC)  SPACE  mo2  |  mo1  LSHFT  BSPC  :Right
 
 ## TrackPoint on/off
 
-The TrackPoint is currently **disabled** (`#define TP_DISABLED` at the top of `boards/shields/corne_tp/corne_tp_right.overlay`) because the module drifts and needs replacing. The flag keeps the PS/2 nodes disabled (driver not compiled), skips the interrupt-priority remap, and stubs the `U_MSS_*` keys to `&none`. The module sits on the switched nice!nano `VCC` rail; `EPTOG` on layer 4 (`&ext_power EP_TOG`, persisted to flash) cuts its power.
+The TrackPoint is currently **disabled** (`#define TP_DISABLED` at the top of `boards/shields/corne_tp/corne_tp_right.overlay`) because the module drifts and needs replacing. The flag keeps the PS/2 nodes disabled (driver not compiled), skips the interrupt-priority remap, and stubs the `U_MSS_*` keys to `&none`. The module sits on the switched nice!nano `VCC` rail; `EPOFF` on layer 4 (`&ext_power EP_OFF`, position 10) cuts its power and `EPON` (position 9) restores it. Explicit on/off rather than a toggle, because a toggle's result depends on the state persisted in flash and there is no visible feedback with the driver compiled out. The state is saved ~60 s after the press.
 
-To re-enable after fitting a new module: delete the `#define TP_DISABLED` line, uncomment the USB-logging lines in `corne_tp.conf` if tuning, and press `EPTOG` if VCC was switched off.
+To re-enable after fitting a new module: delete the `#define TP_DISABLED` line, uncomment the USB-logging lines in `corne_tp.conf` if tuning, and press `EPON` if VCC was switched off.
 
 ## TrackPoint Tuning
 
