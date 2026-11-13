@@ -12,7 +12,7 @@
   #include <dt-bindings/zmk/mouse.h>
   #include <behaviors/mouse_keys.dtsi>
 
-  #ifndef EXPERIMENT_NO_PS2
+  #ifndef TP_DISABLED
     #include <dt-bindings/zmk/mouse_settings.h>
     #include <behaviors/mouse_setting.dtsi>
 
@@ -50,7 +50,7 @@
 
   /* Side-conditional config: only apply on the half that has the PS/2 nodes
    * (set by `#define MOUSE_PS2_DT_PRESENT` in corne_tp_right.overlay). */
-  #if defined(MOUSE_PS2_DT_PRESENT) && !defined(EXPERIMENT_NO_PS2)
+  #if defined(MOUSE_PS2_DT_PRESENT) && !defined(TP_DISABLED)
 
     &mouse_ps2_input_listener {
         layer-toggle = <MOUSE_TP>;
@@ -94,6 +94,6 @@
 
     #endif
 
-  #endif /* MOUSE_PS2_DT_PRESENT && !EXPERIMENT_NO_PS2 */
+  #endif /* MOUSE_PS2_DT_PRESENT && !TP_DISABLED */
 
 #endif /* HAS_MOUSE_TP */

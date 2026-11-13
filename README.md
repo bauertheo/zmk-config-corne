@@ -324,14 +324,7 @@ These are the non-obvious things we hit during this build. Symptoms and resoluti
 
 ### Debug-logging trade-offs
 
-- **Verbose logging is currently enabled** in `config/corne_tp.conf`:
-  ```ini
-  CONFIG_ZMK_USB_LOGGING=y
-  CONFIG_ZMK_LOG_LEVEL_DBG=y
-  CONFIG_SENSOR_LOG_LEVEL_DBG=y
-  CONFIG_BT_LOG_LEVEL_INF=y
-  ```
-  USB CDC stays alive, the controller never enters deep sleep, and PS/2 motion at 40 Hz generates ~240 log lines per second. **Battery drain is significant.** Revert to `CONFIG_ZMK_LOGGING_MINIMAL=y` once the remaining encoder + BLE issues are resolved.
+- **USB logging is currently disabled** in `config/corne_tp.conf` (the TrackPoint is switched off via `TP_DISABLED`, so there is nothing to tune). When enabled, USB CDC stays alive and the controller never enters deep sleep, so battery drain is significant. Re-enable the commented lines only for TP tuning sessions.
 
 ---
 

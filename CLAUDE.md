@@ -52,7 +52,7 @@ The west manifest pulls **`infused-kim/zmk@pr-testing/mouse_ps2_module_base`** (
 | 1 | Symbols + Numpad | Right thumb `mo 1` |
 | 2 | Extend / Navigation | Left inner thumb `mo 2` |
 | 3 | Function + Media | **Conditional**: hold L1 + L2 simultaneously |
-| 4 | Bluetooth + TP-set entry | `mo 4` from layer 2 |
+| 4 | Bluetooth + TP-set entry + `EP_TOG` (VCC rail) | `mo 4` from layer 2 |
 | 5 | Mouse / TrackPoint | **Auto-activated** by TP movement (250 ms debounce) |
 | 6 | TrackPoint settings | `&tog 6` from layers 4 and 5 |
 
@@ -102,6 +102,12 @@ Left:  mt(LCTRL,ESC)  SPACE  mo2  |  mo1  LSHFT  BSPC  :Right
 - **Right half is central** (BLE peripheral): mandatory because the PS/2 driver must run on the central side. Set in `boards/shields/corne_tp/Kconfig.defconfig`.
 - **High-frequency PS/2 pins** (D0/D1/D9): chosen over the low-freq variant for cleaner Bluetooth coexistence; cost is no RGB underglow.
 
+## TrackPoint on/off
+
+The TrackPoint is currently **disabled** (`#define TP_DISABLED` at the top of `boards/shields/corne_tp/corne_tp_right.overlay`) because the module drifts and needs replacing. The flag keeps the PS/2 nodes disabled (driver not compiled), skips the interrupt-priority remap, and stubs the `U_MSS_*` keys to `&none`. The module sits on the switched nice!nano `VCC` rail; `EPTOG` on layer 4 (`&ext_power EP_TOG`, persisted to flash) cuts its power.
+
+To re-enable after fitting a new module: delete the `#define TP_DISABLED` line, uncomment the USB-logging lines in `corne_tp.conf` if tuning, and press `EPTOG` if VCC was switched off.
+
 ## TrackPoint Tuning
 
 - Hold inner thumb (mo MOUSE_KEYS) → press outer-top key → enter MOUSE_TP_SET layer.
@@ -123,4 +129,4 @@ Configured in `corne.conf` for wireless battery life:
 - Idle after 30 s (`ZMK_IDLE_TIMEOUT=30000`)
 - Deep sleep after 15 min (`ZMK_IDLE_SLEEP_TIMEOUT=900000`) — drops power ~100x
 - BT TX power +8 dBm (`CONFIG_BT_CTLR_TX_PWR_PLUS_8`) for stronger split-half link
-- USB logging is currently **on** (`CONFIG_ZMK_USB_LOGGING=y`) for TP tuning. Disable once tuning is done — logging keeps the controller awake and adds flash wear.
+- USB logging is currently **off** (commented out in `corne_tp.conf`) while the TrackPoint is disabled. Re-enable it only for TP tuning — logging keeps the controller awake and adds flash wear.
